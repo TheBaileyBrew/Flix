@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Flix</string>
+    <string name="password_too_short">Password must contain at least 8 characters.</string>
+    <string name="username_too_short">Username must be valid</string>
+</resources>
