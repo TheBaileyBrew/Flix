@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.thebaileybrew.flix.loaders.MovieLoader;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -106,6 +107,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (validUser && validPass) {
                     Toast.makeText(LoginActivity.this, "Logging In...", Toast.LENGTH_SHORT).show();
                     usernameValue = usernameInputText.getText().toString().trim();
+
                     navigateToMovieActivity(true);
                 }
                 break;
