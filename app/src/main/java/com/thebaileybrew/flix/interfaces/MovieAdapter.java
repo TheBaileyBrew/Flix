@@ -1,29 +1,41 @@
 package com.thebaileybrew.flix.interfaces;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.model.Movie;
+import com.thebaileybrew.flix.utils.UrlUtils;
 
 import java.util.ArrayList;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
+    private final static String TAG = MovieAdapter.class.getSimpleName();
+
     private LayoutInflater layoutInflater;
     private ArrayList<Movie> movieCollection;
 
+    final private MovieAdapterClickHandler adapterClickHandler;
+
+    public interface MovieAdapterClickHandler {
+        void onClick(Movie movie);
+    }
+
     //Create the recycler
-    public MovieAdapter(Context context, ArrayList<Movie> movieCollection) {
+    public MovieAdapter(Context context, ArrayList<Movie> movieCollection, MovieAdapterClickHandler clicker) {
         this.layoutInflater = LayoutInflater.from(context);
         this.movieCollection = movieCollection;
+        this.adapterClickHandler = clicker;
     }
 
     @Override
@@ -36,11 +48,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Movie currentMovie = movieCollection.get(position);
-        holder.movieVoteAverage.setProgress(Float.floatToIntBits(currentMovie.getMovieVoteAverage()));
-        holder.movieTitle.setText(currentMovie.getMovieTitle());
-        String moviePosterPath = currentMovie.getMoviePosterPath();
+        holder.movieVoteAverage.setRating((currentMovie.getMovieVoteAverage() / 2));
+        String moviePosterPath = UrlUtils.buildPosterPathUrl(currentMovie.getMoviePosterPath());
+        Log.e(TAG, "onBindViewHolder: current poster path" + moviePosterPath);
         Picasso.get()
                 .load(moviePosterPath)
+                .placeholder(R.drawable.movie_poster)
                 .into(holder.moviePoster);
         //TODO:add imageSource link
     }
@@ -60,16 +73,21 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder {
-        TextView movieTitle;
-        ProgressBar movieVoteAverage;
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        RatingBar movieVoteAverage;
         ImageView moviePoster;
 
         private ViewHolder(View newView) {
             super(newView);
-            movieTitle = newView.findViewById(R.id.movie_cardview_title);
-            movieVoteAverage = newView.findViewById(R.id.movie_cardview_votes);
+            movieVoteAverage = newView.findViewById(R.id.movie_vote_rating);
             moviePoster = newView.findViewById(R.id.movie_cardview_poster);
+            newView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Movie currentMovie = movieCollection.get(getAdapterPosition());
+            adapterClickHandler.onClick(currentMovie);
         }
     }
 }

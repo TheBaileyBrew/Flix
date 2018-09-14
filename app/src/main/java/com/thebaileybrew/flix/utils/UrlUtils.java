@@ -9,7 +9,7 @@ import java.net.URL;
 public class UrlUtils {
     private static final String TAG = UrlUtils.class.getSimpleName();
 
-    private static final String BASE_IMAGE_URL = "https://images.tmdb.org/t/p/";
+    private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
     private static final String BASE_IMAGE_FILE_SIZE = "w342";
     private static final String BASE_IMAGE_LARGE = "w500";
 

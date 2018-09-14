@@ -127,7 +127,7 @@ public class jsonUtils {
                 //Extract the movie language
                 movieLanguage = currentFilm.getString(MOVIE_ORIG_LANGUAGE);
                 //Extract the movie poster path and pass through UrlUtils to build full path
-                moviePosterPath = UrlUtils.buildPosterPathUrl(currentFilm.getString(MOVIE_POSTER_PATH));
+                moviePosterPath = currentFilm.getString(MOVIE_POSTER_PATH);
                 //Extract the movie backdrop and pass through UrlUtils to build full path
                 movieBackdrop = UrlUtils.buildBackdropUrl(currentFilm.getString(MOVIE_BACKDROP));
                 //Extract the movie overview

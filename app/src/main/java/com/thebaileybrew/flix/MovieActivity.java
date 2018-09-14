@@ -1,5 +1,6 @@
 package com.thebaileybrew.flix;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -14,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MovieActivity extends AppCompatActivity {
+public class MovieActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickHandler{
     RecyclerView mRecyclerView;
     MovieAdapter mMovieAdapter;
     ArrayList<Movie> movies = new ArrayList<>();
@@ -24,7 +25,7 @@ public class MovieActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
         mRecyclerView = findViewById(R.id.movie_recycler);
-        mMovieAdapter = new MovieAdapter(this,movies);
+        mMovieAdapter = new MovieAdapter(this,movies, this);
         MovieLoader movieLoader = new MovieLoader(mMovieAdapter);
         movieLoader.execute();
 
@@ -34,5 +35,12 @@ public class MovieActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setAdapter(mMovieAdapter);
+    }
+
+    @Override
+    public void onClick(Movie movie) {
+        Intent openDisplayDetails = new Intent(MovieActivity.this, DetailsActivity.class);
+        //Put Parcel Extra
+        startActivity(openDisplayDetails);
     }
 }
