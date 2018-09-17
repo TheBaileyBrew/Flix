@@ -13,35 +13,29 @@ import com.thebaileybrew.flix.utils.jsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
     private static final String TAG = MovieLoader.class.getSimpleName();
 
     private MovieAdapter mMovieAdapter;
+    private String languageFilter;
 
     public MovieLoader(MovieAdapter movieAdapter) {
         mMovieAdapter = movieAdapter;
 
     }
 
-    /**
-     * Override this method to perform a computation on a background thread. The
-     * specified parameters are the parameters passed to {@link #execute}
-     * by the caller of this task.
-     * <p>
-     * This method can call {@link #publishProgress} to publish updates
-     * on the UI thread.
-     *
-     * @param strings The parameters of the task.
-     * @return A result, defined by the subclass of this task.
-     * @see #onPreExecute()
-     * @see #onPostExecute
-     * @see #publishProgress
-     */
+
     @Override
     protected ArrayList<Movie> doInBackground(String... strings) {
+        if (strings.length < 2 || strings[0] == null) {
+            return null;
+        }
+        String sortingOrder = strings[0];
+        languageFilter = strings[1];
 
-        URL moviesRequestUrl = UrlUtils.buildMovieUrl(BuildConfig.API_KEY);
+        URL moviesRequestUrl = UrlUtils.buildMovieUrl(BuildConfig.API_KEY, sortingOrder);
         try {
             String jsonMoviesResponse = jsonUtils.makeHttpsRequest(moviesRequestUrl);
 
@@ -55,7 +49,17 @@ public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
         if(movies != null) {
-            mMovieAdapter.setMovieCollection(movies);
+            if (languageFilter.equals("all")) {
+                mMovieAdapter.setMovieCollection(movies);
+            } else {
+                ArrayList<Movie> languageFilteredList = new ArrayList<>();
+                for (Movie movie : movies) {
+                    if (movie.getMovieLanguage().equals(languageFilter)) {
+                        languageFilteredList.add(movie);
+                    }
+                }
+                mMovieAdapter.setMovieCollection(languageFilteredList);
+            }
         }
         super.onPostExecute(movies);
 

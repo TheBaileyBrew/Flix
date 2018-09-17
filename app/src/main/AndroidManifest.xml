@@ -28,6 +28,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MovieActivity"/>
         </activity>
+        <activity android:name=".ui.MoviePreferences" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MovieActivity"/>
+        </activity>
     </application>
 
 </manifest>

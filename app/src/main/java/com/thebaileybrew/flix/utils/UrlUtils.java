@@ -15,18 +15,16 @@ public class UrlUtils {
 
     private static final String BASE_MOVIE_URL = "https://api.themoviedb.org/3";
     private static final String BASE_MOVIE_PATH = "movie";
-    private static final String BASE_MOVIE_PAGE_RETURN = "1";
 
     private static final String API_KEY = "api_key";
 
     //Build the URL for querying all movies in the database
-    public static URL buildMovieUrl(String apiKey){
+    public static URL buildMovieUrl(String apiKey, String sortingOrder){
 
         Uri movieQueryUri = Uri.parse(BASE_MOVIE_URL).buildUpon()
                 .appendPath(BASE_MOVIE_PATH)
-                .appendPath("popular")
+                .appendPath(sortingOrder)
                 .appendQueryParameter(API_KEY, apiKey)
-                .appendQueryParameter("page", BASE_MOVIE_PAGE_RETURN)
                 .build();
         URL movieQueryURL;
         try {

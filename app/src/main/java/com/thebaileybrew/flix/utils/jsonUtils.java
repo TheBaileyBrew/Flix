@@ -129,7 +129,7 @@ public class jsonUtils {
                 //Extract the movie poster path and pass through UrlUtils to build full path
                 moviePosterPath = currentFilm.getString(MOVIE_POSTER_PATH);
                 //Extract the movie backdrop and pass through UrlUtils to build full path
-                movieBackdrop = UrlUtils.buildBackdropUrl(currentFilm.getString(MOVIE_BACKDROP));
+                movieBackdrop = currentFilm.getString(MOVIE_BACKDROP);
                 //Extract the movie overview
                 movieOverview = currentFilm.getString(MOVIE_SYNOPSIS);
                 //Extract the movie release date
