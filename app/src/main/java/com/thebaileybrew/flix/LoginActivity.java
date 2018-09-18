@@ -65,12 +65,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private boolean isUsernameValid(@Nullable Editable text) {
-        //TODO: Add further logic to define valid username -- Eventually this should validate against a DB of users
+        //Future Improvement: Add further logic to define valid username -- Eventually this should validate against a DB of users
         return text != null && text.length() >=4;
     }
 
     private boolean isPasswordValid(@Nullable Editable text) {
-        //TODO: Add logic to validate password against DB of user/passwords
+        //Future Improvement: Add logic to validate password against DB of user/passwords
         return text != null && text.length() >= 8;
     }
 
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 navigateToMovieActivity(false);
                 break;
             case R.id.register:
-                //TODO: Add additional field parameters for new user creation
+                //Next Step Add additional field parameters for new user creation
                 //First Name, Last Name, Username/Email, Password, Confirm Password
                 break;
         }

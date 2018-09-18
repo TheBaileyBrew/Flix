@@ -130,7 +130,6 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
     }
 
     private void loadMoviesFromPrefs() {
-        //TODO: Get Shared Preferences and load movie data
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String sortingKey = getString(R.string.preference_sort_key);

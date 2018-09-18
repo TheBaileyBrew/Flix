@@ -53,7 +53,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 .load(moviePosterPath)
                 .placeholder(R.drawable.movie_poster)
                 .into(holder.moviePoster);
-        //TODO:add imageSource link
     }
 
     @Override

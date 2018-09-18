@@ -51,11 +51,6 @@ public class DetailsActivity extends AppCompatActivity {
             }
         }
 
-        //TODO: Set up to display details for specific selected film
-
-        /*TODO: Set up background process to query API again for
-        *    RUNTIME, GENRE LIST, TAGLINE
-        */
     }
 
     private void populateUI(Movie movie) {
@@ -82,7 +77,6 @@ public class DetailsActivity extends AppCompatActivity {
         movieRelease = findViewById(R.id.movie_release);
         movieRating = findViewById(R.id.movie_rating);
         movieOverview = findViewById(R.id.synopsis_text);
-
         movieTagline = findViewById(R.id.movie_tagline);
         movieGenres = findViewById(R.id.movie_genres);
     }
