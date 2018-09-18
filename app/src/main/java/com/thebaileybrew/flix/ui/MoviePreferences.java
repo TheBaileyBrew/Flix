@@ -9,8 +9,6 @@ import android.preference.PreferenceManager;
 
 import com.thebaileybrew.flix.R;
 
-import java.util.prefs.Preferences;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 

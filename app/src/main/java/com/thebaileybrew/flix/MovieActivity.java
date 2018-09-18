@@ -1,6 +1,5 @@
 package com.thebaileybrew.flix;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,20 +12,19 @@ import android.support.constraint.ConstraintLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.thebaileybrew.flix.interfaces.MovieAdapter;
-import com.thebaileybrew.flix.interfaces.MovieData;
 import com.thebaileybrew.flix.loaders.MovieLoader;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.ui.MoviePreferences;
 
 import java.util.ArrayList;
-import java.util.Set;
+import java.util.Objects;
+import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.net.ConnectivityManagerCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -34,7 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import static android.view.View.VISIBLE;
 
 public class MovieActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickHandler {
-    private final static String TAG = MovieActivity.class.getSimpleName();
+
 
     private final static String SAVE_STATE = "save_state";
     private final static String RECYCLER_STATE = "recycler_state";
@@ -42,13 +40,11 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
     private Parcelable savedRecyclerState;
 
-    RecyclerView mRecyclerView;
-    MovieAdapter mMovieAdapter;
-    ArrayList<Movie> movies = new ArrayList<>();
-    ConstraintLayout noNetworkLayout;
-    GridLayoutManager gridLayoutManager;
-    SwipeRefreshLayout swipeRefresh;
-    SharedPreferences sharedPrefs;
+    private RecyclerView mRecyclerView;
+    private ArrayList<Movie> movies = new ArrayList<>();
+    private ConstraintLayout noNetworkLayout;
+    private GridLayoutManager gridLayoutManager;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +74,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
             //Show no connection layout
             mRecyclerView.setVisibility(View.INVISIBLE);
             noNetworkLayout.setVisibility(VISIBLE);
+            swipeRefresh.setRefreshing(false);
         }
     }
 
@@ -88,17 +85,53 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
                 if (checkNetworkStatus()) {
                     //Load Movies
                     noNetworkLayout.setVisibility(View.INVISIBLE);
+                    mRecyclerView.setVisibility(VISIBLE);
+                    loadMoviesFromPrefs();
                 } else {
                     //Show no connection layout
                     noNetworkLayout.setVisibility(VISIBLE);
+                    mRecyclerView.setVisibility(View.INVISIBLE);
+                    getRandomNoNetworkView();
+
                 }
             }
         });
     }
 
+    private void getRandomNoNetworkView() {
+        TextView noNetworkTextMessageOne = findViewById(R.id.internet_out_message);
+        ImageView noNetworkImage = findViewById(R.id.internet_out_image);
+        Random randomNetworkGen = new Random();
+        int i = randomNetworkGen.nextInt((5 - 1) + 1);
+        switch (i) {
+            case 1:
+                noNetworkTextMessageOne.setText(getString(R.string.internet_message_one));
+                noNetworkImage.setImageResource(R.drawable.voldemort);
+                break;
+            case 2:
+                noNetworkTextMessageOne.setText(getString(R.string.internet_message_two));
+                noNetworkImage.setImageResource(R.drawable.wonka);
+                break;
+            case 3:
+                noNetworkTextMessageOne.setText(getString(R.string.internet_message_three));
+                noNetworkImage.setImageResource(R.drawable.lotr);
+                break;
+            case 4:
+                noNetworkTextMessageOne.setText(getString(R.string.internet_message_four));
+                noNetworkImage.setImageResource(R.drawable.taken);
+                break;
+            default:
+                noNetworkTextMessageOne.setText(getString(R.string.internet_message_default));
+                noNetworkImage.setImageResource(R.drawable.thanos);
+                break;
+
+        }
+        swipeRefresh.setRefreshing(false);
+    }
+
     private void loadMoviesFromPrefs() {
         //TODO: Get Shared Preferences and load movie data
-        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         String sortingKey = getString(R.string.preference_sort_key);
         String sortingDefault = getString(R.string.preference_sort_popular);
@@ -109,7 +142,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         String language = sharedPrefs.getString(languageKey, languageDefault);
 
         //Set up the Adapter
-        mMovieAdapter = new MovieAdapter(this,movies, this);
+        MovieAdapter mMovieAdapter = new MovieAdapter(this, movies, this);
         //Assign the adapter to the Loader
         MovieLoader movieLoader = new MovieLoader(mMovieAdapter);
         movieLoader.execute(sorting, language);
@@ -119,6 +152,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         //Assign the adapter to the Recycler
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerState);
+        swipeRefresh.setRefreshing(false);
 
 
     }
@@ -128,7 +162,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         ConnectivityManager connectivityManager = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
 
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        NetworkInfo networkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
         boolean hasNetworkConn = false;
         if (networkInfo != null && networkInfo.isConnected()) {
             hasNetworkConn = true;

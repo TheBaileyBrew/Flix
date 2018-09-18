@@ -3,8 +3,6 @@ package com.thebaileybrew.flix.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.List;
-
 public class Movie implements Parcelable{
     //This class model is for the basic details of the film
 

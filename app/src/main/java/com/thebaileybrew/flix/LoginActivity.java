@@ -4,25 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
-import com.thebaileybrew.flix.loaders.MovieLoader;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
-    TextInputEditText passwordInputText;
-    TextInputEditText usernameInputText;
-    TextInputLayout passwordInputLayout;
-    TextInputLayout usernameInputLayout;
-    Boolean validUser, validPass;
-    String usernameValue = "";
+    private TextInputEditText passwordInputText;
+    private TextInputEditText usernameInputText;
+    private TextInputLayout passwordInputLayout;
+    private TextInputLayout usernameInputLayout;
+    private Boolean validUser;
+    private Boolean validPass;
+    private String usernameValue = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

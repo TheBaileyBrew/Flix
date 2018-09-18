@@ -3,7 +3,7 @@ package com.thebaileybrew.flix.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.thebaileybrew.flix.interfaces.MovieData;
+import com.thebaileybrew.flix.model.Film;
 import com.thebaileybrew.flix.model.Movie;
 
 import org.json.JSONArray;
@@ -14,11 +14,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -36,6 +34,11 @@ public class jsonUtils {
     private static final String MOVIE_BACKDROP = "backdrop_path";
     private static final String MOVIE_SYNOPSIS = "overview";
     private static final String MOVIE_RELEASE_DATE = "release_date";
+
+    private static final String MOVIE_TAGLINE = "tagline";
+    private static final String MOVIE_GENRE = "genres";
+    private static final String MOVIE_GENRE_NAME = "name";
+    private static final String MOVIE_RUNTIME = "runtime";
 
     private jsonUtils(){}
 
@@ -143,6 +146,90 @@ public class jsonUtils {
             Log.e(TAG, "extractMoviesFromJson: problems extracting film details from json", je);
         }
         return movieCollection;
+    }
+
+
+    //Get Single Movie Detail Extra Data
+    public static String requestHttpsSingleFilm (URL url) throws IOException {
+        String jsonResponse = "";
+        //Check for NULL
+        if (url == null) {
+            return jsonResponse;
+        }
+
+        HttpsURLConnection urlConnection = null;
+        InputStream inputStream = null;
+
+        try {
+            Log.e(TAG, "requestHttpsSingleFilm: full url is: " + String.valueOf(url));
+            urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(12000);
+            urlConnection.setConnectTimeout(20000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+            //If successful request
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readSingleFilmStream(inputStream);
+            } else {
+                Log.e(TAG, "requestHttpsSingleFilm: Errod code: "
+                        + urlConnection.getResponseCode());
+            }
+        } catch (IOException ie) {
+            Log.e(TAG, "requestHttpsSingleFilm: Could not retrieve JSON", ie);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
+
+    private static String readSingleFilmStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
+    }
+
+    public static ArrayList<Film> extractSingleFilmData(String jsonReturn) {
+        int movieID;
+        String movieTagline;
+        int movieRuntime;
+        String movieGenre;
+
+        if (TextUtils.isEmpty(jsonReturn)) {
+            return null;
+        }
+        ArrayList<Film> movieExtraDetails = new ArrayList<>();
+        try {
+            JSONObject baseJsonResponse = new JSONObject(jsonReturn);
+            movieTagline = baseJsonResponse.getString(MOVIE_TAGLINE);
+            movieRuntime = baseJsonResponse.getInt(MOVIE_RUNTIME);
+            StringBuilder outputString = new StringBuilder();
+            JSONArray genreFilmArray = baseJsonResponse.getJSONArray(MOVIE_GENRE);
+            for (int g = 0; g < genreFilmArray.length(); g ++) {
+                JSONObject currentGenres = genreFilmArray.getJSONObject(g);
+                String tempGenre = currentGenres.getString(MOVIE_GENRE_NAME);
+                outputString.append(tempGenre);
+                outputString.append(" ");
+            }
+            movieGenre = outputString.toString();
+            movieExtraDetails.add(new Film(movieTagline, movieRuntime, movieGenre));
+        } catch (JSONException je) {
+            Log.e(TAG, "extractSingleFilmData: Problem extracting details", je);
+        }
+        return movieExtraDetails;
     }
 
 

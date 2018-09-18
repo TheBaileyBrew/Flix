@@ -1,24 +1,21 @@
 package com.thebaileybrew.flix.loaders;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.thebaileybrew.flix.BuildConfig;
 import com.thebaileybrew.flix.interfaces.MovieAdapter;
-import com.thebaileybrew.flix.interfaces.MovieData;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.utils.UrlUtils;
 import com.thebaileybrew.flix.utils.jsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
     private static final String TAG = MovieLoader.class.getSimpleName();
 
-    private MovieAdapter mMovieAdapter;
+    private final MovieAdapter mMovieAdapter;
     private String languageFilter;
 
     public MovieLoader(MovieAdapter movieAdapter) {

@@ -6,9 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.thebaileybrew.flix.R;
@@ -22,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
     private final static String TAG = MovieAdapter.class.getSimpleName();
 
-    private LayoutInflater layoutInflater;
+    private final LayoutInflater layoutInflater;
     private ArrayList<Movie> movieCollection;
 
     final private MovieAdapterClickHandler adapterClickHandler;
@@ -72,10 +70,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
-
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        RatingBar movieVoteAverage;
-        ImageView moviePoster;
+        final RatingBar movieVoteAverage;
+        final ImageView moviePoster;
 
         private ViewHolder(View newView) {
             super(newView);
