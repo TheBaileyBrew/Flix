@@ -3,6 +3,7 @@ package com.thebaileybrew.flix.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.thebaileybrew.flix.model.Credit;
 import com.thebaileybrew.flix.model.Film;
 import com.thebaileybrew.flix.model.Movie;
 
@@ -19,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.security.auth.login.LoginException;
 
 public class jsonUtils {
     private static  final String TAG = jsonUtils.class.getSimpleName();
@@ -39,6 +41,11 @@ public class jsonUtils {
     private static final String MOVIE_GENRE = "genres";
     private static final String MOVIE_GENRE_NAME = "name";
     private static final String MOVIE_RUNTIME = "runtime";
+
+    private static final String MOVIE_CAST = "cast";
+    private static final String CREDIT_CHARACTER = "character";
+    private static final String CREDIT_ACTOR = "name";
+    private static final String CREDIT_IMAGE = "profile_path";
 
     private jsonUtils(){}
 
@@ -118,25 +125,25 @@ public class jsonUtils {
             for (int m = 0; m < baseJSONArray.length(); m++) {
                 JSONObject currentFilm = baseJSONArray.getJSONObject(m);
                 //Extract the movie ID
-                movieID = currentFilm.getInt(MOVIE_ID);
+                movieID = currentFilm.optInt(MOVIE_ID);
                 //Extract the movie vote count
-                movieVoteCount = currentFilm.getInt(MOVIE_VOTE_COUNT);
+                movieVoteCount = currentFilm.optInt(MOVIE_VOTE_COUNT);
                 //Extract the movie vote average
-                movieVoteAverage = currentFilm.getLong(MOVIE_AVERAGE);
+                movieVoteAverage = currentFilm.optLong(MOVIE_AVERAGE);
                 //Extract the movie title
-                movieTitle = currentFilm.getString(MOVIE_NAME);
+                movieTitle = currentFilm.optString(MOVIE_NAME);
                 //Extract the movie popularity
-                moviePopularity = currentFilm.getLong(MOVIE_POPULARITY);
+                moviePopularity = currentFilm.optLong(MOVIE_POPULARITY);
                 //Extract the movie language
-                movieLanguage = currentFilm.getString(MOVIE_ORIG_LANGUAGE);
+                movieLanguage = currentFilm.optString(MOVIE_ORIG_LANGUAGE);
                 //Extract the movie poster path and pass through UrlUtils to build full path
-                moviePosterPath = currentFilm.getString(MOVIE_POSTER_PATH);
+                moviePosterPath = currentFilm.optString(MOVIE_POSTER_PATH);
                 //Extract the movie backdrop and pass through UrlUtils to build full path
-                movieBackdrop = currentFilm.getString(MOVIE_BACKDROP);
+                movieBackdrop = currentFilm.optString(MOVIE_BACKDROP, "null");
                 //Extract the movie overview
-                movieOverview = currentFilm.getString(MOVIE_SYNOPSIS);
+                movieOverview = currentFilm.optString(MOVIE_SYNOPSIS);
                 //Extract the movie release date
-                movieReleaseDate = currentFilm.getString(MOVIE_RELEASE_DATE);
+                movieReleaseDate = currentFilm.optString(MOVIE_RELEASE_DATE);
                 movieCollection.add(new Movie(movieID, movieVoteCount, movieVoteAverage, movieTitle,
                         moviePopularity, movieLanguage, moviePosterPath, movieBackdrop,
                         movieOverview, movieReleaseDate));
@@ -214,8 +221,8 @@ public class jsonUtils {
         ArrayList<Film> movieExtraDetails = new ArrayList<>();
         try {
             JSONObject baseJsonResponse = new JSONObject(jsonReturn);
-            movieTagline = baseJsonResponse.getString(MOVIE_TAGLINE);
-            movieRuntime = baseJsonResponse.getInt(MOVIE_RUNTIME);
+            movieTagline = baseJsonResponse.optString(MOVIE_TAGLINE, "");
+            movieRuntime = baseJsonResponse.optInt(MOVIE_RUNTIME, 0);
             StringBuilder outputString = new StringBuilder();
             JSONArray genreFilmArray = baseJsonResponse.getJSONArray(MOVIE_GENRE);
             for (int g = 0; g < genreFilmArray.length(); g ++) {
@@ -232,5 +239,82 @@ public class jsonUtils {
         return movieExtraDetails;
     }
 
+    //Get Single Movie Credit Details
+    public static String requestHttpsMovieCredits (URL url) throws IOException {
+        String jsonResponse = "";
+        //Check for NULL
+        if (url == null) {
+            return jsonResponse;
+        }
+
+        HttpsURLConnection urlConnection = null;
+        InputStream inputStream = null;
+
+        try {
+            Log.e(TAG, "requestHttpsMovieCredits: full url is:" + String.valueOf(url));
+            urlConnection = (HttpsURLConnection) url.openConnection();
+            urlConnection.setReadTimeout(12000);
+            urlConnection.setConnectTimeout(20000);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+            //If successful
+            if (urlConnection.getResponseCode() == 200) {
+                inputStream = urlConnection.getInputStream();
+                jsonResponse = readCreditsFromStream(inputStream);
+            } else {
+                Log.e(TAG, "requestHttpsMovieCredits: Error code: "
+                        + urlConnection.getResponseCode() );
+            }
+        } catch (IOException ie) {
+            Log.e(TAG, "requestHttpsMovieCredits: Could not retrieve JSON", ie);
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+        return jsonResponse;
+    }
+
+    private static String readCreditsFromStream(InputStream inputStream) throws IOException {
+        StringBuilder output = new StringBuilder();
+        if (inputStream != null) {
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8"));
+            BufferedReader reader = new BufferedReader(inputStreamReader);
+            String line = reader.readLine();
+            while (line != null) {
+                output.append(line);
+                line = reader.readLine();
+            }
+        }
+        return output.toString();
+    }
+
+    public static ArrayList<Credit> extractCreditDetails(String jsonReturn) {
+        String characterName;
+        String characterActor;
+        String characterImage;
+
+        if (TextUtils.isEmpty(jsonReturn)) {
+            return null;
+        }
+        ArrayList<Credit> movieCredits = new ArrayList<>();
+        try {
+            JSONObject baseJSONResponse = new JSONObject(jsonReturn);
+            JSONArray creditsList = baseJSONResponse.getJSONArray(MOVIE_CAST);
+            for (int c = 0; c < 10; c++) {
+                JSONObject currentCharacter = creditsList.getJSONObject(c);
+                characterName = currentCharacter.getString(CREDIT_CHARACTER);
+                characterActor = currentCharacter.getString(CREDIT_ACTOR);
+                characterImage = currentCharacter.getString(CREDIT_IMAGE);
+                movieCredits.add(new Credit(characterName, characterActor, characterImage));
+            }
+        } catch (JSONException je) {
+            Log.e(TAG, "extractCreditDetails: problem getting credits", je);
+        }
+        return movieCredits;
+    }
 
 }

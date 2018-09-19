@@ -87,7 +87,7 @@ public class Movie implements Parcelable{
         return movieVoteCount;
     }
 
-    public float getMovieVoteAverage() {
+    public long getMovieVoteAverage() {
         return movieVoteAverage;
     }
 

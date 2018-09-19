@@ -20,10 +20,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="@color/colorPrimaryDark"
+            app:contentScrim="@color/colorWhite"
             app:expandedTitleMarginEnd="@dimen/expand_title_margin"
             app:expandedTitleMarginStart="@dimen/expand_title_margin"
-            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Large"
+            app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Title"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
             <ImageView
                 android:id="@+id/poster_imageview"
@@ -64,6 +64,13 @@
                 android:textStyle="italic"
                 android:textColor="@color/colorPrimary"
                 tools:text="An entire universe. Once and for all."/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/credits_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/movie_tagline"/>
             <LinearLayout
                 android:layout_marginLeft="@dimen/margin_horizontal_16dp"
                 android:layout_marginRight="@dimen/margin_horizontal_16dp"
@@ -178,7 +185,7 @@
                 android:id="@+id/genre_guideline"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/movie_tagline"
+                app:layout_constraintTop_toBottomOf="@id/credits_recycler"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="@dimen/large_margin_horizontal_32dp"
                 android:layout_marginRight="@dimen/large_margin_horizontal_32dp"
@@ -186,7 +193,7 @@
                 android:layout_height="@dimen/half_margin_vertical_4dp"
                 android:background="@color/colorPrimaryFade"
                 />
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/synopsis_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -195,25 +202,28 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 android:layout_marginLeft="@dimen/margin_horizontal_16dp"
-                android:layout_marginRight="@dimen/margin_horizontal_16dp"
-                android:weightSum="5"
-                android:orientation="horizontal">
+                android:layout_marginRight="@dimen/margin_horizontal_16dp">
+                <ImageView
+                    android:id="@+id/poster"
+                    android:layout_width="175dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:padding="@dimen/half_margin_vertical_4dp"
+                    android:elevation="@dimen/half_margin_vertical_4dp"
+                    android:layout_height="275dp"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/movie_poster" />
                 <TextView
                     android:id="@+id/synopsis_text"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
+                    android:layout_width="match_parent"
+                    android:layout_toRightOf="@id/poster"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="@dimen/margin_horizontal_8dp"
+                    android:layout_marginLeft="@dimen/margin_horizontal_8dp"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_default24sp"
                     tools:text="@string/lorem_ipsum"/>
-                <ImageView
-                    android:id="@+id/poster"
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
-                    android:padding="@dimen/half_margin_vertical_4dp"
-                    android:elevation="@dimen/half_margin_vertical_4dp"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/movie_poster" />
-            </LinearLayout>
+            </RelativeLayout>
         </android.support.constraint.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

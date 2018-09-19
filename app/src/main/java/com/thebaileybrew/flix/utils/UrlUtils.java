@@ -15,6 +15,7 @@ public class UrlUtils {
 
     private static final String BASE_MOVIE_URL = "https://api.themoviedb.org/3";
     private static final String BASE_MOVIE_PATH = "movie";
+    private static final String BASE_CREDIT_PATH = "credits";
 
     private static final String API_KEY = "api_key";
 
@@ -55,10 +56,37 @@ public class UrlUtils {
 
     //Build the poster path url
     public static String buildPosterPathUrl(String posterPath) {
-        return BASE_IMAGE_URL + BASE_IMAGE_FILE_SIZE + posterPath;
+        return BASE_IMAGE_URL + BASE_IMAGE_LARGE + posterPath;
     }
     //Build the backdrop path url
-    public static String buildBackdropUrl(String backdropPath) {
-        return BASE_IMAGE_URL + BASE_IMAGE_LARGE + backdropPath;
+    public static String buildBackdropUrl(String backdropPath, String posterPath) {
+        if (backdropPath.equals("null")) {
+            return BASE_IMAGE_URL + BASE_IMAGE_LARGE + posterPath;
+        } else {
+            return BASE_IMAGE_URL + BASE_IMAGE_LARGE + backdropPath;
+        }
+    }
+
+    //Build the credit details url
+    public static URL buildCreditsMovieUrl(String apiKey, String movieID) {
+        Uri movieCreditsQuery = Uri.parse(BASE_MOVIE_URL).buildUpon()
+                .appendPath(BASE_MOVIE_PATH)
+                .appendPath(movieID)
+                .appendPath(BASE_CREDIT_PATH)
+                .appendQueryParameter(API_KEY, apiKey)
+                .build();
+        URL creditsQueryURL;
+        try {
+            creditsQueryURL = new URL(movieCreditsQuery.toString());
+            return creditsQueryURL;
+        } catch (MalformedURLException me) {
+            Log.e(TAG, "buildCreditsMovieUrl: failed to build credits url", me);
+            return null;
+        }
+    }
+
+    //Build the credit image url
+    public static String buildCreditImageUrl (String creditPath) {
+        return BASE_IMAGE_URL + BASE_IMAGE_LARGE + creditPath;
     }
 }

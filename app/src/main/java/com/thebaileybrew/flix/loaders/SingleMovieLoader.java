@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.thebaileybrew.flix.BuildConfig;
+import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.model.Film;
 import com.thebaileybrew.flix.utils.UrlUtils;
 import com.thebaileybrew.flix.utils.jsonUtils;
@@ -52,7 +53,11 @@ public class SingleMovieLoader extends AsyncTask<String, Void, ArrayList<Film>> 
             Film currentFilm = films.get(0);
             movieTag.setText(currentFilm.getMovieTagLine());
             movieGenre.setText(currentFilm.getMovieGenre());
-            movieTime.setText(convertTime(currentFilm.getMovieRuntime()));
+            if (currentFilm.getMovieRuntime() == 0) {
+                movieTime.setText(R.string.unknown_time);
+            } else {
+                movieTime.setText(convertTime(currentFilm.getMovieRuntime()));
+            }
 
         }
 

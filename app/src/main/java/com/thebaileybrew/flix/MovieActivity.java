@@ -171,10 +171,11 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
     //Custom onclick for loading movie details based on selection in Recycler
     @Override
-    public void onClick(Movie movie) {
+    public void onClick(View view, Movie movie) {
         Intent openDisplayDetails = new Intent(MovieActivity.this, DetailsActivity.class);
         //Put Parcel Extra
         openDisplayDetails.putExtra(MOVIE_KEY, movie);
+
         startActivity(openDisplayDetails);
     }
 

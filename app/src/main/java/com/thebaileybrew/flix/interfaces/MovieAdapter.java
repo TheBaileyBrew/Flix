@@ -26,7 +26,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     final private MovieAdapterClickHandler adapterClickHandler;
 
     public interface MovieAdapterClickHandler {
-        void onClick(Movie movie);
+        void onClick(View view, Movie movie);
     }
 
     //Create the recycler
@@ -83,7 +83,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             Movie currentMovie = movieCollection.get(getAdapterPosition());
-            adapterClickHandler.onClick(currentMovie);
+            adapterClickHandler.onClick(v, currentMovie);
         }
     }
 }
