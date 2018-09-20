@@ -1,11 +1,13 @@
 package com.thebaileybrew.flix;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,6 +18,7 @@ import com.thebaileybrew.flix.interfaces.MovieAdapter;
 import com.thebaileybrew.flix.loaders.MovieLoader;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.ui.MoviePreferences;
+import com.thebaileybrew.flix.utils.displayMetricsUtils;
 import com.thebaileybrew.flix.utils.networkUtils;
 
 import java.util.ArrayList;
@@ -57,7 +60,8 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
         mRecyclerView = findViewById(R.id.movie_recycler);
         noNetworkLayout = findViewById(R.id.no_connection_constraint_layout);
-        gridLayoutManager = new GridLayoutManager(this, 2);
+        int columnCount = displayMetricsUtils.calculateGridColumn(this);
+        gridLayoutManager = new GridLayoutManager(this, columnCount);
         swipeRefresh = findViewById(R.id.swipe_refresh);
 
         setSwipeRefreshListener();
@@ -149,10 +153,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         mRecyclerView.setAdapter(mMovieAdapter);
         mRecyclerView.getLayoutManager().onRestoreInstanceState(savedRecyclerState);
         swipeRefresh.setRefreshing(false);
-
-
     }
-
 
     //Custom onclick for loading movie details based on selection in Recycler
     @Override
@@ -163,9 +164,6 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
         startActivity(openDisplayDetails);
     }
-
-
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(SAVE_STATE, movies);
@@ -189,7 +187,6 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         getMenuInflater().inflate(R.menu.main_toolbar, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

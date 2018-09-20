@@ -35,11 +35,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
         MaterialButton loginButton = findViewById(R.id.login_button);
-        MaterialButton registerButton = findViewById(R.id.register);
         MaterialButton skipLoginButton = findViewById(R.id.skip_login);
         //Set an error for password if less than 8 characters
         loginButton.setOnClickListener(this);
-        registerButton.setOnClickListener(this);
         skipLoginButton.setOnClickListener(this);
 
         // Clears the error after password has 8 characters.
@@ -112,10 +110,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.skip_login:
                 navigateToMovieActivity(false);
-                break;
-            case R.id.register:
-                //Next Step Add additional field parameters for new user creation
-                //First Name, Last Name, Username/Email, Password, Confirm Password
                 break;
         }
 
