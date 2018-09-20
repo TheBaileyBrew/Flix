@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorPrimaryFade">
+    xmlns:tools="http://schemas.android.com/tools">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
@@ -45,7 +44,6 @@
             android:textSize="@dimen/text_default28sp"
             tools:text="Thanos has found your internet connectivity expendable"/>
         <TextView
-            android:id="@+id/refresh_steps"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

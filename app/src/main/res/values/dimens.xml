@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="blank">5dp</dimen>
     <dimen name="appbar_height">280dp</dimen>
     <dimen name="expand_title_margin">16dp</dimen>
     <dimen name="margin_horizontal_8dp">8dp</dimen>

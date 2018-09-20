@@ -70,14 +70,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:textSize="@dimen/text_standard_18sp"
                 android:text="@string/login"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/skip_login"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_horizontal_16dp"
+                android:layout_marginEnd="@dimen/margin_horizontal_8dp"
                 android:layout_toStartOf="@id/login_button"
+                android:textSize="@dimen/text_standard_18sp"
                 android:text="@string/skip_login"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/register"
@@ -85,6 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:textSize="@dimen/text_standard_18sp"
                 android:text="@string/register"/>
         </RelativeLayout>
     </android.support.constraint.ConstraintLayout>

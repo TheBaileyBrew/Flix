@@ -20,7 +20,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.security.auth.login.LoginException;
 
 public class jsonUtils {
     private static  final String TAG = jsonUtils.class.getSimpleName();
@@ -210,7 +209,6 @@ public class jsonUtils {
     }
 
     public static ArrayList<Film> extractSingleFilmData(String jsonReturn) {
-        int movieID;
         String movieTagline;
         int movieRuntime;
         String movieGenre;

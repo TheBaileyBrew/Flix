@@ -51,7 +51,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Log.e(TAG, "onBindViewHolder: current poster path" + moviePosterPath);
         Picasso.get()
                 .load(moviePosterPath)
-                .placeholder(R.drawable.movie_poster)
+                .placeholder(R.drawable.flix_logo)
                 .into(holder.moviePoster);
     }
 

@@ -10,7 +10,6 @@ public class UrlUtils {
     private static final String TAG = UrlUtils.class.getSimpleName();
 
     private static final String BASE_IMAGE_URL = "https://image.tmdb.org/t/p/";
-    private static final String BASE_IMAGE_FILE_SIZE = "w342";
     private static final String BASE_IMAGE_LARGE = "w500";
 
     private static final String BASE_MOVIE_URL = "https://api.themoviedb.org/3";

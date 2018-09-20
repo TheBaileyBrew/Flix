@@ -1,10 +1,7 @@
 package com.thebaileybrew.flix;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -19,9 +16,9 @@ import com.thebaileybrew.flix.interfaces.MovieAdapter;
 import com.thebaileybrew.flix.loaders.MovieLoader;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.ui.MoviePreferences;
+import com.thebaileybrew.flix.utils.networkUtils;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,7 +62,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
         setSwipeRefreshListener();
 
-        if (checkNetworkStatus()) {
+        if (networkUtils.checkNetwork(this)) {
             //Load Movies
             noNetworkLayout.setVisibility(View.INVISIBLE);
             mRecyclerView.setVisibility(VISIBLE);
@@ -82,7 +79,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (checkNetworkStatus()) {
+                if (networkUtils.checkNetwork(MovieActivity.this)) {
                     //Load Movies
                     noNetworkLayout.setVisibility(View.INVISIBLE);
                     mRecyclerView.setVisibility(VISIBLE);
@@ -156,18 +153,6 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
 
     }
 
-    private boolean checkNetworkStatus() {
-        //Check for network status
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = Objects.requireNonNull(connectivityManager).getActiveNetworkInfo();
-        boolean hasNetworkConn = false;
-        if (networkInfo != null && networkInfo.isConnected()) {
-            hasNetworkConn = true;
-        }
-        return hasNetworkConn;
-    }
 
     //Custom onclick for loading movie details based on selection in Recycler
     @Override

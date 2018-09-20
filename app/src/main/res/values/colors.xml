@@ -3,7 +3,11 @@
     <color name="colorPrimary">#f57c00</color>
     <color name="colorPrimaryFade">#35f57c00</color>
     <color name="colorPrimaryDark">#424242</color>
+    <color name="colorWhiteFade">#50ffffff</color>
     <color name="colorAccent">#757575</color>
     <color name="colorWhite">#fefefe</color>
     <color name="colorWhiteWash">#80757575</color>
+
+    <color name="colorToolbarExpanded">#fcfcfc</color>
+    <color name="colorToolbarCollapsed">#000000</color>
 </resources>
