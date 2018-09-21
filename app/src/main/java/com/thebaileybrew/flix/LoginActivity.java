@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         MaterialButton skipLoginButton = findViewById(R.id.skip_login);
         //Set an error for password if less than 8 characters
         loginButton.setOnClickListener(this);
+        registerButton.setOnClickListener(this);
         skipLoginButton.setOnClickListener(this);
 
         // Clears the error after password has 8 characters.
