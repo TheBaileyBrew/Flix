@@ -59,7 +59,7 @@ public class jsonUtils {
         InputStream inputStream = null;
 
         try {
-            Log.e(TAG, "makeHttpsRequest: full url is:" + String.valueOf(url));
+            Log.e(TAG, "Full url is:" + String.valueOf(url));
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setReadTimeout(12000);
             urlConnection.setConnectTimeout(20000);

@@ -3,11 +3,13 @@
     <string-array name="preference_sort_options">
         <item>@string/preference_sort_popular_label</item>
         <item>@string/preference_sort_top_rated_label</item>
+        <item>@string/preference_sort_release_date_label</item>
     </string-array>
 
     <string-array name="preference_sort_values">
         <item>@string/preference_sort_popular</item>
         <item>@string/preference_sort_top_rated</item>
+        <item>@string/preference_sort_most_recent</item>
     </string-array>
 
     <string-array name="preference_sort_language_options">
@@ -27,4 +29,5 @@
         <item>@string/preference_sort_language_ko</item>
         <item>@string/preference_sort_language_all</item>
     </string-array>
+
 </resources>

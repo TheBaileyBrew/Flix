@@ -141,11 +141,15 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         String languageDefault = getString(R.string.preference_sort_language_all);
         String language = sharedPrefs.getString(languageKey, languageDefault);
 
+        String filterYearKey = getString(R.string.preference_year_key);
+        String filterYearDefault = getString(R.string.preference_year_default);
+        String filterYear = sharedPrefs.getString(filterYearKey, filterYearDefault);
+
         //Set up the Adapter
         MovieAdapter mMovieAdapter = new MovieAdapter(this, movies, this);
         //Assign the adapter to the Loader
         MovieLoader movieLoader = new MovieLoader(mMovieAdapter);
-        movieLoader.execute(sorting, language);
+        movieLoader.execute(sorting, language, filterYear);
         //Set up the Recycler
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);

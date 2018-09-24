@@ -1,10 +1,21 @@
 package com.thebaileybrew.flix.utils;
 
 import android.net.Uri;
+import android.os.Parcel;
 import android.util.Log;
+
+import com.thebaileybrew.flix.R;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import static com.thebaileybrew.flix.R.*;
 
 public class UrlUtils {
     private static final String TAG = UrlUtils.class.getSimpleName();
@@ -14,18 +25,120 @@ public class UrlUtils {
 
     private static final String BASE_MOVIE_URL = "https://api.themoviedb.org/3";
     private static final String BASE_MOVIE_PATH = "movie";
+    private static final String BASE_MOVIE_PATH_DISCOVER = "discover";
     private static final String BASE_CREDIT_PATH = "credits";
 
     private static final String API_KEY = "api_key";
+    private static final String SORT_BY = "sort_by";
+    private static final String VOTE_COUNT = "vote_count.gte";
+    private static final String VOTE_MINIMUM = "1000";
+    private static final String WITH_ORIG_LANGUAGE = "with_original_language";
+    private static final String PRIMARY_RELEASE_YEAR = "primary_release_year";
+    private static final String RELEASE_DATE_START = "release_date.gte";
+    private static final String RELEASE_DATE_END = "release_date.lte";
+
+    private static String baseMovieQueryUrl(String apiKey) {
+        Uri movieQuery = Uri.parse(BASE_MOVIE_URL).buildUpon()
+                    .appendPath(BASE_MOVIE_PATH_DISCOVER)
+                    .appendPath(BASE_MOVIE_PATH)
+                    .appendQueryParameter(API_KEY, apiKey)
+                    .build();
+        return movieQuery.toString();
+    }
+
+    private static String setMaxYear() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy", Locale.US);
+        Date curDate = Calendar.getInstance(Locale.US).getTime();
+        return dateFormat.format(curDate);
+    }
+    private static String setCurrentDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date curDate = Calendar.getInstance(Locale.US).getTime();
+        return dateFormat.format(curDate);
+    }
+    private static String setMaxDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Calendar curCal = Calendar.getInstance(Locale.US);
+        int currentYear = Calendar.YEAR;
+        Calendar maxCal = Calendar.getInstance(Locale.US);
+        maxCal.set(Calendar.MONTH, Calendar.OCTOBER);
+        maxCal.set(Calendar.YEAR, currentYear);
+        long calTime = curCal.getTimeInMillis();
+        long maxTime = maxCal.getTimeInMillis();
+        if (maxTime < calTime) {
+            curCal.add(Calendar.YEAR, 1);
+            curCal.add(Calendar.MONTH, -9);
+        } else {
+            curCal.add(Calendar.MONTH, 3);
+        }
+        Date getDate = curCal.getTime();
+        return(dateFormat.format(getDate));
+    }
+
+    private static String sortWithLanguage(String uriBuilder, String value) {
+        Uri movieQuery = Uri.parse(uriBuilder).buildUpon()
+                .appendQueryParameter(WITH_ORIG_LANGUAGE, value)
+                .build();
+        return movieQuery.toString();
+    }
+
+    private static String sortWithFilterYear(String uriBuilder, String value) {
+        Uri movieQuery = Uri.parse(uriBuilder).buildUpon()
+                .appendQueryParameter(PRIMARY_RELEASE_YEAR, value)
+                .build();
+        return movieQuery.toString();
+    }
 
     //Build the URL for querying all movies in the database
-    public static URL buildMovieUrl(String apiKey, String sortingOrder){
+    public static URL buildMovieUrl(
+            String apiKey, String languageSort, String sortingOrder, String filterYear){
+        String baseMovie = baseMovieQueryUrl(apiKey);
+        Uri movieQueryUri;
+        Log.e(TAG, "buildMovieUrl: current language: " + languageSort);
+        Log.e(TAG, "buildMovieUrl: current sort: " + sortingOrder);
+        Log.e(TAG, "buildMovieUrl: current year: " + filterYear);
 
-        Uri movieQueryUri = Uri.parse(BASE_MOVIE_URL).buildUpon()
-                .appendPath(BASE_MOVIE_PATH)
-                .appendPath(sortingOrder)
-                .appendQueryParameter(API_KEY, apiKey)
-                .build();
+        switch(sortingOrder) {
+            case "popularity.desc":
+                movieQueryUri = Uri.parse(baseMovie).buildUpon()
+                        .appendQueryParameter(SORT_BY, sortingOrder)
+                        .build();
+                baseMovie = movieQueryUri.toString();
+                break;
+            case "vote_average.desc":
+                movieQueryUri = Uri.parse(baseMovie).buildUpon()
+                        .appendQueryParameter(SORT_BY, sortingOrder)
+                        .appendQueryParameter(VOTE_COUNT, VOTE_MINIMUM)
+                        .build();
+                baseMovie = movieQueryUri.toString();
+                break;
+            case "release_date.desc":
+                movieQueryUri = Uri.parse(baseMovie).buildUpon()
+                        .appendQueryParameter(SORT_BY, sortingOrder)
+                        .appendQueryParameter(RELEASE_DATE_START, setCurrentDate())
+                        .appendQueryParameter(RELEASE_DATE_END, setMaxDate())
+                        .build();
+                baseMovie = movieQueryUri.toString();
+                break;
+            default:
+                break;
+        }
+
+        //Checks for LANGUAGE SORT ALL
+        if (!languageSort.equals("all")) {
+            movieQueryUri = Uri.parse(sortWithLanguage(baseMovie, languageSort)).buildUpon().build();
+            baseMovie = movieQueryUri.toString();
+        }
+
+        //Checks for FILTER YEAR PREFERENCE
+        if (!filterYear.equals("0000")) {
+            movieQueryUri = Uri.parse(sortWithFilterYear(baseMovie, filterYear)).buildUpon().build();
+            baseMovie = movieQueryUri.toString();
+        }
+
+        movieQueryUri = Uri.parse(baseMovie).buildUpon().build();
+        Log.e(TAG, "buildMovieUrl: full URL is:" + movieQueryUri );
+
         URL movieQueryURL;
         try {
             movieQueryURL = new URL(movieQueryUri.toString());
@@ -34,7 +147,8 @@ public class UrlUtils {
             Log.e(TAG, "buildMovieUrl: failed to build full db URL", me);
             return null;
         }
-    }
+    };
+
     //Build the URL for querying a single movie in the database
     public static URL buildSingleMovieUrl(String apiKey, String movieID) {
 

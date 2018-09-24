@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.thebaileybrew.flix.BuildConfig;
+import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.interfaces.MovieAdapter;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.utils.UrlUtils;
@@ -16,7 +17,6 @@ public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
     private static final String TAG = MovieLoader.class.getSimpleName();
 
     private final MovieAdapter mMovieAdapter;
-    private String languageFilter;
 
     public MovieLoader(MovieAdapter movieAdapter) {
         mMovieAdapter = movieAdapter;
@@ -26,13 +26,19 @@ public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
 
     @Override
     protected ArrayList<Movie> doInBackground(String... strings) {
-        if (strings.length < 2 || strings[0] == null) {
+        if (strings.length < 3 || strings[0] == null) {
             return null;
         }
         String sortingOrder = strings[0];
-        languageFilter = strings[1];
+        String languageFilter = strings[1];
+        String filterYear = strings[2];
 
-        URL moviesRequestUrl = UrlUtils.buildMovieUrl(BuildConfig.API_KEY, sortingOrder);
+
+        URL moviesRequestUrl = UrlUtils.buildMovieUrl(
+                    BuildConfig.API_KEY,
+                    languageFilter,
+                    sortingOrder,
+                    filterYear);
         try {
             String jsonMoviesResponse = jsonUtils.makeHttpsRequest(moviesRequestUrl);
 
@@ -46,17 +52,7 @@ public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
         if(movies != null) {
-            if (languageFilter.equals("all")) {
-                mMovieAdapter.setMovieCollection(movies);
-            } else {
-                ArrayList<Movie> languageFilteredList = new ArrayList<>();
-                for (Movie movie : movies) {
-                    if (movie.getMovieLanguage().equals(languageFilter)) {
-                        languageFilteredList.add(movie);
-                    }
-                }
-                mMovieAdapter.setMovieCollection(languageFilteredList);
-            }
+            mMovieAdapter.setMovieCollection(movies);
         }
         super.onPostExecute(movies);
 
