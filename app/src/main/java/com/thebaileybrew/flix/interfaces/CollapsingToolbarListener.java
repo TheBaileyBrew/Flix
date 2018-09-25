@@ -1,8 +1,12 @@
 package com.thebaileybrew.flix.interfaces;
 
-import com.google.android.material.appbar.AppBarLayout;
+import android.content.Context;
+import android.widget.ImageView;
 
-public abstract class CollapsingToolbarListener implements AppBarLayout.OnOffsetChangedListener {
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+
+public class CollapsingToolbarListener implements AppBarLayout.OnOffsetChangedListener {
 
 
     public enum State { EXPANDED, COLLAPSED, IDLE}
@@ -11,6 +15,7 @@ public abstract class CollapsingToolbarListener implements AppBarLayout.OnOffset
 
     @Override
     public final void onOffsetChanged(AppBarLayout appBarLayout, int i) {
+
         if (i == 0) {
             if (mCurrentState != State.EXPANDED) {
                 onStateChanged(appBarLayout, State.EXPANDED);
@@ -29,5 +34,7 @@ public abstract class CollapsingToolbarListener implements AppBarLayout.OnOffset
         }
     }
 
-    protected abstract void onStateChanged(AppBarLayout appBarLayout, State state);
+    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+
+    }
 }

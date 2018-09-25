@@ -20,9 +20,9 @@ public class Movie implements Parcelable{
 
     private int movieID;
     private int movieVoteCount;
-    private long movieVoteAverage;
+    private double movieVoteAverage;
     private String movieTitle;
-    private long moviePopularity;
+    private double moviePopularity;
     private String movieLanguage;
     private String moviePosterPath;
     private String movieBackdrop;
@@ -32,8 +32,8 @@ public class Movie implements Parcelable{
     //No args constructor for serialization
     public Movie() {}
 
-    public Movie(int movieID, int movieVoteCount, long movieVoteAverage, String movieTitle,
-                 long moviePopularity, String movieLanguage, String moviePosterPath,
+    public Movie(int movieID, int movieVoteCount, double movieVoteAverage, String movieTitle,
+                 double moviePopularity, String movieLanguage, String moviePosterPath,
                  String movieBackdrop, String movieOverview, String movieReleaseDate) {
         this.movieID = movieID;
         this.movieVoteCount = movieVoteCount;
@@ -50,7 +50,7 @@ public class Movie implements Parcelable{
     private Movie(Parcel in) {
         movieID = in.readInt();
         movieVoteCount = in.readInt();
-        movieVoteAverage = in.readLong();
+        movieVoteAverage = in.readDouble();
         movieTitle = in.readString();
         moviePopularity = in.readLong();
         movieLanguage = in.readString();
@@ -69,9 +69,9 @@ public class Movie implements Parcelable{
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(movieID);
         parcel.writeInt(movieVoteCount);
-        parcel.writeLong(movieVoteAverage);
+        parcel.writeDouble(movieVoteAverage);
         parcel.writeString(movieTitle);
-        parcel.writeLong(moviePopularity);
+        parcel.writeDouble(moviePopularity);
         parcel.writeString(movieLanguage);
         parcel.writeString(moviePosterPath);
         parcel.writeString(movieBackdrop);
@@ -87,7 +87,7 @@ public class Movie implements Parcelable{
         return movieVoteCount;
     }
 
-    public long getMovieVoteAverage() {
+    public double getMovieVoteAverage() {
         return movieVoteAverage;
     }
 
@@ -95,7 +95,7 @@ public class Movie implements Parcelable{
         return movieTitle;
     }
 
-    public float getMoviePopularity() {
+    public double getMoviePopularity() {
         return moviePopularity;
     }
 

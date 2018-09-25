@@ -52,7 +52,6 @@
     <string name="average_rating">AVERAGE RATING</string>
     <string name="login">LOGIN</string>
     <string name="skip_login">SKIP LOGIN</string>
-    <string name="register">REGISTER</string>
     <string name="password_hint">Password</string>
     <string name="username_or_email_hint">Username or Email</string>
     <string name="preferences">Preferences</string>
@@ -71,8 +70,4 @@
     <string name="static_text_as_credit">as</string>
     <string name="preference_year_default">0000</string>
     <string name="preference_year_key">primary_release_year</string>
-    <string name="preference_start_date_key">preference_start_date</string>
-    <string name="preference_end_date_key">preference_end_date</string>
-    <string name="preference_start_date_default" translatable="false">0000-00-00</string>
-    <string name="preference_end_date_default" translatable="false">0000-00-00</string>
 </resources>

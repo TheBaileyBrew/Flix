@@ -16,16 +16,12 @@ import java.util.Locale;
 
 public class SingleMovieLoader extends AsyncTask<String, Void, ArrayList<Film>> {
     private static final String TAG = SingleMovieLoader.class.getSimpleName();
-    private final static String TIME_FORMAT = "%02d:%02d";
 
-    private final TextView movieTag;
-    private final TextView movieGenre;
-    private final TextView movieTime;
 
-    public SingleMovieLoader (TextView movieTag, TextView movieGenre, TextView movieTime) {
-        this.movieTag = movieTag;
-        this.movieGenre = movieGenre;
-        this.movieTime = movieTime;
+
+
+    public SingleMovieLoader () {
+
     }
 
 
@@ -49,24 +45,7 @@ public class SingleMovieLoader extends AsyncTask<String, Void, ArrayList<Film>> 
 
     @Override
     protected void onPostExecute(ArrayList<Film> films) {
-        if (films != null) {
-            Film currentFilm = films.get(0);
-            movieTag.setText(currentFilm.getMovieTagLine());
-            movieGenre.setText(currentFilm.getMovieGenre());
-            if (currentFilm.getMovieRuntime() == 0) {
-                movieTime.setText(R.string.unknown_time);
-            } else {
-                movieTime.setText(convertTime(currentFilm.getMovieRuntime()));
-            }
-
-        }
 
         super.onPostExecute(films);
-    }
-
-    private String convertTime(int runTime) {
-        int hours = runTime / 60;
-        int minutes = runTime % 60;
-        return String.format(Locale.US, TIME_FORMAT, hours, minutes);
     }
 }

@@ -19,8 +19,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextInputEditText usernameInputText;
     private TextInputLayout passwordInputLayout;
     private TextInputLayout usernameInputLayout;
-    private Boolean validUser;
-    private Boolean validPass;
     private String usernameValue = "";
 
     @Override
@@ -87,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         switch (v.getId()) {
             case R.id.login_button:
+                Boolean validPass;
                 if(!isPasswordValid(passwordInputText.getText())) {
                     passwordInputLayout.setError(getString(R.string.password_too_short));
                     validPass = false;
@@ -94,6 +93,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     passwordInputLayout.setError(null); //Clear the error
                     validPass = true;
                 }
+                Boolean validUser;
                 if (!isUsernameValid(usernameInputText.getText())) {
                     usernameInputLayout.setError(getString(R.string.username_too_short));
                     validUser = false;

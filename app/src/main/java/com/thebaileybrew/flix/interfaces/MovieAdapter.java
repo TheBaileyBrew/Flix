@@ -14,6 +14,7 @@ import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.utils.UrlUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,13 +47,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Movie currentMovie = movieCollection.get(position);
-        holder.movieVoteAverage.setRating((currentMovie.getMovieVoteAverage() / 2));
+        holder.movieVoteAverage.setRating(trimVoteFount((float)(currentMovie.getMovieVoteAverage() / 2)));
         String moviePosterPath = UrlUtils.buildPosterPathUrl(currentMovie.getMoviePosterPath());
         Log.e(TAG, "onBindViewHolder: current poster path" + moviePosterPath);
         Picasso.get()
                 .load(moviePosterPath)
                 .placeholder(R.drawable.flix_logo)
                 .into(holder.moviePoster);
+    }
+
+    private float trimVoteFount(float movieVoteAverage) {
+        String s = String.format(Locale.US, "%.2f", movieVoteAverage);
+        return Float.parseFloat(s);
     }
 
     @Override

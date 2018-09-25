@@ -36,7 +36,7 @@
         android:layout_margin="@dimen/half_margin_vertical_4dp"
         android:elevation="@dimen/elevation_8dp"
         android:numStars="5"
-        android:stepSize="0.01"
+        android:stepSize="0.1"
         android:isIndicator="true"/>
 
 </android.support.constraint.ConstraintLayout>

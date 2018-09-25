@@ -18,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -102,7 +103,7 @@ public class jsonUtils {
     public static ArrayList<Movie> extractMoviesFromJson(String jsonData) {
         int movieID;
         int movieVoteCount;
-        long movieVoteAverage;
+        double movieVoteAverage;
         String movieTitle;
         long moviePopularity;
         String movieLanguage;
@@ -128,7 +129,8 @@ public class jsonUtils {
                 //Extract the movie vote count
                 movieVoteCount = currentFilm.optInt(MOVIE_VOTE_COUNT);
                 //Extract the movie vote average
-                movieVoteAverage = currentFilm.optLong(MOVIE_AVERAGE);
+                movieVoteAverage = currentFilm.optDouble(MOVIE_AVERAGE);
+                Log.e(TAG, "extractMoviesFromJson: vote avg: " + movieVoteAverage );
                 //Extract the movie title
                 movieTitle = currentFilm.optString(MOVIE_NAME);
                 //Extract the movie popularity

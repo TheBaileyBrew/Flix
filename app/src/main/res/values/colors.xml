@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#f57c00</color>
-    <color name="colorPrimaryFade">#35f57c00</color>
+    <color name="colorPrimaryFade">#ffd5ab</color>
     <color name="colorPrimaryDark">#424242</color>
     <color name="colorWhiteFade">#50ffffff</color>
     <color name="colorAccent">#757575</color>
