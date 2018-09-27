@@ -36,7 +36,7 @@ public class MoviePreferences extends AppCompatActivity {
 
 
     public static class MoviePreferenceFragment extends PreferenceFragment
-            implements Preference.OnPreferenceChangeListener, DatePickerDialog.OnDateSetListener {
+            implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -68,7 +68,6 @@ public class MoviePreferences extends AppCompatActivity {
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
             String stringValue = value.toString();
-            Log.e(TAG, "onPreferenceChange: current value is" + stringValue);
             if (stringValue.equals(String.valueOf(R.string.preference_sort_most_recent))) {
                 Preference yearFilter = findPreference("primary_release_year");
                 bindPreferenceSummaryToValue(yearFilter);
@@ -104,11 +103,6 @@ public class MoviePreferences extends AppCompatActivity {
                     PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
-        }
-
-        @Override
-        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-            Log.e(TAG, "onDateSet: " + year + month + dayOfMonth);
         }
     }
 }

@@ -70,4 +70,5 @@
     <string name="static_text_as_credit">as</string>
     <string name="preference_year_default">0000</string>
     <string name="preference_year_key">primary_release_year</string>
+    <string name="search">Search</string>
 </resources>

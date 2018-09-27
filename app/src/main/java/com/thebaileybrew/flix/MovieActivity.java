@@ -1,5 +1,6 @@
 package com.thebaileybrew.flix;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,12 +9,19 @@ import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.thebaileybrew.flix.interfaces.MovieAdapter;
 import com.thebaileybrew.flix.loaders.MovieLoader;
 import com.thebaileybrew.flix.model.Movie;
@@ -25,6 +33,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -33,12 +44,12 @@ import static android.view.View.VISIBLE;
 
 public class MovieActivity extends AppCompatActivity implements MovieAdapter.MovieAdapterClickHandler {
 
-
     private final static String SAVE_STATE = "save_state";
     private final static String RECYCLER_STATE = "recycler_state";
     private final static String MOVIE_KEY = "parcel_movie";
 
     private Parcelable savedRecyclerState;
+    private String queryResult = "";
 
     private RecyclerView mRecyclerView;
     private ArrayList<Movie> movies = new ArrayList<>();
@@ -46,10 +57,41 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
     private GridLayoutManager gridLayoutManager;
     private SwipeRefreshLayout swipeRefresh;
 
+    private LinearLayout searchLayout;
+    private TextInputLayout searchEntryLayout;
+    private TextInputEditText searchEntry;
+    private boolean searchVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
+        initViews();
+        searchEntry.setOnEditorActionListener(new EditText.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || event != null
+                        && event.getAction() == KeyEvent.ACTION_DOWN
+                        && event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                    if (event == null || !event.isShiftPressed()) {
+                        queryResult = v.getText().toString();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(searchEntry.getWindowToken(), 0);
+                        }
+                        swipeRefresh.setRefreshing(true);
+                        loadMoviesFromPrefs();
+                        hideSearchMenu();
+                        swipeRefresh.setRefreshing(false);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
         if (savedInstanceState == null || !savedInstanceState.containsKey(SAVE_STATE)) {
             movies = new ArrayList<>();
@@ -58,12 +100,8 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
             savedRecyclerState = savedInstanceState.getParcelable(RECYCLER_STATE);
         }
 
-        mRecyclerView = findViewById(R.id.movie_recycler);
-        noNetworkLayout = findViewById(R.id.no_connection_constraint_layout);
         int columnCount = displayMetricsUtils.calculateGridColumn(this);
         gridLayoutManager = new GridLayoutManager(this, columnCount);
-        swipeRefresh = findViewById(R.id.swipe_refresh);
-
         setSwipeRefreshListener();
 
         if (networkUtils.checkNetwork(this)) {
@@ -77,6 +115,17 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
             noNetworkLayout.setVisibility(VISIBLE);
             swipeRefresh.setRefreshing(false);
         }
+    }
+
+
+
+    private void initViews() {
+        mRecyclerView = findViewById(R.id.movie_recycler);
+        noNetworkLayout = findViewById(R.id.no_connection_constraint_layout);
+        swipeRefresh = findViewById(R.id.swipe_refresh);
+        searchLayout = findViewById(R.id.search_layout);
+        searchEntryLayout = findViewById(R.id.search_layout_entry);
+        searchEntry = findViewById(R.id.search_entry);
     }
 
     private void setSwipeRefreshListener() {
@@ -149,7 +198,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         MovieAdapter mMovieAdapter = new MovieAdapter(this, movies, this);
         //Assign the adapter to the Loader
         MovieLoader movieLoader = new MovieLoader(mMovieAdapter);
-        movieLoader.execute(sorting, language, filterYear);
+        movieLoader.execute(sorting, language, filterYear, queryResult);
         //Set up the Recycler
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
@@ -189,6 +238,9 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_toolbar, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
         return true;
     }
 
@@ -199,8 +251,26 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
                 Intent openSettings = new Intent(this, MoviePreferences.class);
                 startActivity(openSettings);
                 return true;
+            case R.id.app_bar_search:
+                if (searchVisible) {
+                    hideSearchMenu();
+                } else {
+                    showSearchMenu();
+                }
+
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void showSearchMenu() {
+        searchLayout.setVisibility(VISIBLE);
+        searchVisible = true;
+    }
+
+    private void hideSearchMenu() {
+        searchLayout.setVisibility(View.INVISIBLE);
+        searchVisible = false;
     }
 }

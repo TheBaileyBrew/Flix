@@ -32,13 +32,15 @@ public class MovieLoader extends AsyncTask<String, Void, ArrayList<Movie>> {
         String sortingOrder = strings[0];
         String languageFilter = strings[1];
         String filterYear = strings[2];
+        String searchQuery = strings[3];
 
 
         URL moviesRequestUrl = UrlUtils.buildMovieUrl(
                     BuildConfig.API_KEY,
                     languageFilter,
                     sortingOrder,
-                    filterYear);
+                    filterYear,
+                    searchQuery);
         try {
             String jsonMoviesResponse = jsonUtils.makeHttpsRequest(moviesRequestUrl);
 

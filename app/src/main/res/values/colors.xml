@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#f57c00</color>
-    <color name="colorPrimaryFade">#ffd5ab</color>
+    <color name="colorPrimary">#285929</color>
+    <color name="colorPrimaryText">#fdfdfd</color>
+    <color name="colorPrimaryFade">#202020</color>
     <color name="colorPrimaryDark">#424242</color>
     <color name="colorWhiteFade">#50ffffff</color>
     <color name="colorAccent">#757575</color>
@@ -10,4 +11,18 @@
 
     <color name="colorToolbarExpanded">#fcfcfc</color>
     <color name="colorToolbarCollapsed">#000000</color>
+
+    <!-- Color Scheme for Rating Progress-->
+    <!-- HIGH -->
+    <color name="colorGoodRating">#25cc00</color>
+    <color name="colorGoodRatingFade">#b8ffc3</color>
+    <color name="colorGoodFade">#9025cc00</color>
+    <!-- MED -->
+    <color name="colorMidRating">#f5c400</color>
+    <color name="colorMidRatingFade">#ffe7ab</color>
+    <color name="colorMidFade">#90f5c400</color>
+    <!-- LOW -->
+    <color name="colorLowRating">#dc0202</color>
+    <color name="colorLowRatingFade">#ffa1a1</color>
+    <color name="colorLowFade">#90dc0202</color>
 </resources>

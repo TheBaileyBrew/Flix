@@ -23,7 +23,8 @@
         <EditTextPreference
             android:defaultValue="@string/preference_year_default"
             android:key="@string/preference_year_key"
-            android:title="Filter By Year"/>
+            android:title="Filter By Year"
+            android:inputType="number"/>
     </com.thebaileybrew.flix.ui.CustomPreferenceCategory>
     <com.thebaileybrew.flix.ui.CustomPreferenceCategory
         android:title="Clear All Settings and Filters">

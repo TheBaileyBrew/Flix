@@ -33,6 +33,8 @@
             app:layout_constraintTop_toBottomOf="@id/flix_logo"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            android:textColorHint="@color/colorWhiteWash"
+            app:boxStrokeColor="@color/colorWhite"
             android:hint="@string/username_or_email_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username_edit_text"
@@ -40,6 +42,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:textSize="@dimen/text_default24sp"
+                android:textColor="@color/colorPrimaryText"
+                android:textColorHint="@color/colorWhiteWash"
                 android:maxLines="1"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -52,6 +56,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:errorEnabled="true"
+            android:textColorHint="@color/colorWhiteWash"
+            app:boxStrokeColor="@color/colorWhite"
             android:hint="@string/password_hint">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password_edit_text"
@@ -59,6 +65,8 @@
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
                 android:textSize="@dimen/text_default24sp"
+                android:textColor="@color/colorPrimaryText"
+                android:textColorHint="@color/colorWhiteWash"
                 android:maxLines="1"/>
         </com.google.android.material.textfield.TextInputLayout>
         <RelativeLayout
@@ -72,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:textSize="@dimen/text_standard_18sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryText"
                 android:text="@string/login"/>
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/skip_login"
@@ -82,7 +90,7 @@
                 android:layout_marginEnd="@dimen/margin_horizontal_8dp"
                 android:layout_toStartOf="@id/login_button"
                 android:textSize="@dimen/text_standard_18sp"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/colorPrimaryText"
                 android:text="@string/skip_login"/>
         </RelativeLayout>
     </android.support.constraint.ConstraintLayout>

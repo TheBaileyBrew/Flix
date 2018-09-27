@@ -1,6 +1,7 @@
 package com.thebaileybrew.flix.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
 public class displayMetricsUtils {
@@ -14,5 +15,15 @@ public class displayMetricsUtils {
             columnCount = 2;
         }
         return columnCount;
+    }
+
+    public static float displayToPixel(Resources resources, float dp) {
+        final float scale = resources.getDisplayMetrics().density;
+        return dp * scale + 0.5f;
+    }
+
+    public static float screenToPixel(Resources resources, float sp) {
+        final float scale = resources.getDisplayMetrics().scaledDensity;
+        return sp * scale;
     }
 }

@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/movie_card_height"
+    xmlns:custom="http://schemas.android.com/tools"
     android:layout_margin="@dimen/half_margin_vertical_4dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -25,18 +26,23 @@
             android:contentDescription="@string/movie_poster" />
     </android.support.constraint.ConstraintLayout>
     </androidx.cardview.widget.CardView>
-    <RatingBar
-        android:id="@+id/movie_vote_rating"
+    <com.thebaileybrew.flix.interfaces.StaticProgressBar
+        android:id="@+id/movie_rating_view"
+        android:background="@drawable/rounded_edge"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="12dp"
+        android:layout_marginStart="@dimen/margin_horizontal_8dp"
+        android:layout_marginEnd="@dimen/margin_horizontal_8dp"
+        android:layout_marginBottom="@dimen/margin_vertical_8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:theme="@style/RatingBarTheme"
-        style="@style/RatingBarTheme"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/half_margin_vertical_4dp"
-        android:elevation="@dimen/elevation_8dp"
-        android:numStars="5"
-        android:stepSize="0.1"
-        android:isIndicator="true"/>
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:arc_stroke_width="12dp"
+        custom:arc_progress="5.2"
+        app:arc_text_size="36sp"
+        app:arc_suffix_text=" "
+        app:arc_bottom_text_size="12sp"
+        app:arc_bottom_text="RATING"/>
+
 
 </android.support.constraint.ConstraintLayout>

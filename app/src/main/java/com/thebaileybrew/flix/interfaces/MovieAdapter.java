@@ -1,10 +1,14 @@
 package com.thebaileybrew.flix.interfaces;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 
@@ -47,9 +51,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Movie currentMovie = movieCollection.get(position);
-        holder.movieVoteAverage.setRating(trimVoteFount((float)(currentMovie.getMovieVoteAverage() / 2)));
+
+        holder.movieRatingView.setMax(10);
+        holder.movieRatingView.setSuffixText(" ");
+        float value = (float) (currentMovie.getMovieVoteAverage());
+        holder.movieRatingView.setProgress(value);
+        float currentProgress = holder.movieRatingView.getProgress();
+        holder.updateMovieRating(currentProgress);
         String moviePosterPath = UrlUtils.buildPosterPathUrl(currentMovie.getMoviePosterPath());
-        Log.e(TAG, "onBindViewHolder: current poster path" + moviePosterPath);
+
         Picasso.get()
                 .load(moviePosterPath)
                 .placeholder(R.drawable.flix_logo)
@@ -76,12 +86,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        final RatingBar movieVoteAverage;
+        final StaticProgressBar movieRatingView;
         final ImageView moviePoster;
 
         private ViewHolder(View newView) {
             super(newView);
-            movieVoteAverage = newView.findViewById(R.id.movie_vote_rating);
+            movieRatingView = newView.findViewById(R.id.movie_rating_view);
             moviePoster = newView.findViewById(R.id.movie_cardview_poster);
             newView.setOnClickListener(this);
         }
@@ -90,6 +100,49 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         public void onClick(View v) {
             Movie currentMovie = movieCollection.get(getAdapterPosition());
             adapterClickHandler.onClick(v, currentMovie);
+        }
+
+        public void updateMovieRating(double currentProgress) {
+            if(currentProgress >= 7.00) {
+                movieRatingView.setTextColor(Color.parseColor("#ffffff"));
+                movieRatingView.setFinishedStrokeColor(Color.parseColor("#25cc00"));
+                movieRatingView.setUnfinishedStrokeColor(Color.parseColor("#b8ffc3"));
+                movieRatingView.setBackgroundResource(R.drawable.good_rounded_edge);
+                if (currentProgress >= 8.00) {
+                    movieRatingView.setBottomText("GREAT");
+                } else if (currentProgress >= 9.00) {
+                    movieRatingView.setBottomText("BEST");
+                } else {
+                    movieRatingView.setBottomText("GOOD");
+                }
+            } else if (currentProgress >= 4.25) {
+                movieRatingView.setTextColor(Color.parseColor("#ffffff"));
+                movieRatingView.setFinishedStrokeColor(Color.parseColor("#f5c400"));
+                movieRatingView.setUnfinishedStrokeColor(Color.parseColor("#ffe7ab"));
+                movieRatingView.setBackgroundResource(R.drawable.mid_rounded_edge);
+                if (currentProgress >= 6.00) {
+                    movieRatingView.setBottomText("AVERAGE");
+                } else if (currentProgress >=4.75) {
+                    movieRatingView.setBottomText("OKAY");
+                } else {
+                    movieRatingView.setBottomText("MEH..");
+                }
+            } else {
+                movieRatingView.setTextColor(Color.parseColor("#ffffff"));
+                movieRatingView.setFinishedStrokeColor(Color.parseColor("#dc0202"));
+                movieRatingView.setUnfinishedStrokeColor(Color.parseColor("#ffa1a1"));
+                movieRatingView.setBackgroundResource(R.drawable.bad_rounded_edge);
+                if (currentProgress >= 3.5) {
+                    movieRatingView.setBottomText("MEH");
+                } else if (currentProgress >= 2.00) {
+                    movieRatingView.setBottomText("AVOID");
+                } else if (currentProgress == 0.00) {
+                    movieRatingView.setBottomText("NO SCORE");
+                } else {
+                    movieRatingView.setBottomText("HARD PASS");
+                }
+            }
+
         }
     }
 }

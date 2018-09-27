@@ -130,7 +130,6 @@ public class jsonUtils {
                 movieVoteCount = currentFilm.optInt(MOVIE_VOTE_COUNT);
                 //Extract the movie vote average
                 movieVoteAverage = currentFilm.optDouble(MOVIE_AVERAGE);
-                Log.e(TAG, "extractMoviesFromJson: vote avg: " + movieVoteAverage );
                 //Extract the movie title
                 movieTitle = currentFilm.optString(MOVIE_NAME);
                 //Extract the movie popularity
@@ -251,7 +250,6 @@ public class jsonUtils {
         InputStream inputStream = null;
 
         try {
-            Log.e(TAG, "requestHttpsMovieCredits: full url is:" + String.valueOf(url));
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setReadTimeout(12000);
             urlConnection.setConnectTimeout(20000);
@@ -304,12 +302,25 @@ public class jsonUtils {
         try {
             JSONObject baseJSONResponse = new JSONObject(jsonReturn);
             JSONArray creditsList = baseJSONResponse.getJSONArray(MOVIE_CAST);
-            for (int c = 0; c < 10; c++) {
-                JSONObject currentCharacter = creditsList.getJSONObject(c);
-                characterName = currentCharacter.getString(CREDIT_CHARACTER);
-                characterActor = currentCharacter.getString(CREDIT_ACTOR);
-                characterImage = currentCharacter.getString(CREDIT_IMAGE);
-                movieCredits.add(new Credit(characterName, characterActor, characterImage));
+            if (TextUtils.isEmpty(String.valueOf(creditsList))) {
+                return null;
+            }
+            if (creditsList.length() < 10) {
+                for (int c = 0; c < 10; c++) {
+                    JSONObject currentCharacter = creditsList.getJSONObject(c);
+                    characterName = currentCharacter.getString(CREDIT_CHARACTER);
+                    characterActor = currentCharacter.getString(CREDIT_ACTOR);
+                    characterImage = currentCharacter.getString(CREDIT_IMAGE);
+                    movieCredits.add(new Credit(characterName, characterActor, characterImage));
+                }
+            } else {
+                for (int c = 0; c < creditsList.length(); c++) {
+                    JSONObject currentCharacter = creditsList.getJSONObject(c);
+                    characterName = currentCharacter.getString(CREDIT_CHARACTER);
+                    characterActor = currentCharacter.getString(CREDIT_ACTOR);
+                    characterImage = currentCharacter.getString(CREDIT_IMAGE);
+                    movieCredits.add(new Credit(characterName, characterActor, characterImage));
+                }
             }
         } catch (JSONException je) {
             Log.e(TAG, "extractCreditDetails: problem getting credits", je);
