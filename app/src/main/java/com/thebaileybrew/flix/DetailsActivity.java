@@ -17,6 +17,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -41,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -52,6 +54,7 @@ public class DetailsActivity extends AppCompatActivity {
     private androidx.appcompat.widget.Toolbar mToolbar;
     private ImageView posterImage;
     private ImageView poster;
+    private LinearLayout movieDetailsLayout;
     private TextView movieRuntime;
     private TextView movieRelease;
     private TextView movieRating;
@@ -69,21 +72,23 @@ public class DetailsActivity extends AppCompatActivity {
     private RecyclerView creditsRecycler;
     private TextView noCreditsText;
     private ArrayList<Film> arrayFilm = new ArrayList<>();
+    private boolean landscapeMode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        animScaleDown = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
-        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out_ratingbar);
-        animScaleUp = AnimationUtils.loadAnimation(this, R.anim.anim_scale_up);
-        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in_ratingbar);
+        landscapeMode = getResources().getDisplayMetrics().widthPixels > getResources().getDisplayMetrics().heightPixels;
+        Log.e(TAG, "onCreate: widthpx: " + getResources().getDisplayMetrics().widthPixels);
+        Log.e(TAG, "onCreate: heightpx: " + getResources().getDisplayMetrics().heightPixels);
+        defineAnimations();
         initViews();
+        //Setup the toolbar with navigation back
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP);
+        mToolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorPrimaryText), PorterDuff.Mode.SRC_ATOP);
         Intent getMovieIntent = getIntent();
-
+        //Check for Parcelable data pass
         if (getMovieIntent != null) {
             if (getMovieIntent.hasExtra(MOVIE_KEY)) {
                 Movie movie = getMovieIntent.getParcelableExtra(MOVIE_KEY);
@@ -93,6 +98,8 @@ public class DetailsActivity extends AppCompatActivity {
                 currentFilmRating = movie.getMovieVoteAverage();
             }
         }
+        //Set up the CollapsingToolbar and attach a listener to determine the current state
+        //This method also starts the animation for hiding/showing StaticProgress and Poster objects
         AppBarLayout appBarLayout = findViewById(R.id.app_toolbar);
         appBarLayout.setExpanded(true);
         appBarLayout.addOnOffsetChangedListener(new CollapsingToolbarListener() {
@@ -120,6 +127,15 @@ public class DetailsActivity extends AppCompatActivity {
         });
     }
 
+    //Method for declaring the Animation Effects that can happen to objects in any viewstate
+    private void defineAnimations() {
+        animScaleDown = AnimationUtils.loadAnimation(this, R.anim.anim_scale);
+        animFadeOut = AnimationUtils.loadAnimation(this, R.anim.anim_fade_out_ratingbar);
+        animScaleUp = AnimationUtils.loadAnimation(this, R.anim.anim_scale_up);
+        animFadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in_ratingbar);
+    }
+
+    //Method for updating and animating the progress of the StaticProgressBar object
     private void updateRatingBar(double currentProgress) {
         movieRatingBar.setMax(10);
         movieRatingBar.setSuffixText(" ");
@@ -128,6 +144,7 @@ public class DetailsActivity extends AppCompatActivity {
         animation.setDuration(2000);
         animation.setInterpolator(new OvershootInterpolator());
         animation.start();
+        //Update Text, Rating and Bar Color depending on vote_average returned via json pull
         if(currentProgress >= 7.00) {
             movieRatingBar.setTextColor(Color.parseColor("#ffffff"));
             movieRatingBar.setFinishedStrokeColor(Color.parseColor("#25cc00"));
@@ -170,33 +187,69 @@ public class DetailsActivity extends AppCompatActivity {
 
     }
 
+    //Method to show the poster image overlapping the collapsing toolbar
     private void showPosterImage() {
         poster.startAnimation(animScaleUp);
         poster.setVisibility(VISIBLE);
     }
+    //Method to hide the StaticProgressBar (behind the poster image) when poster is revealed
     private void hideRatingBar() {
         movieRatingBar.startAnimation(animFadeOut);
-        movieRatingBar.setVisibility(View.INVISIBLE);
+        movieRatingBar.setVisibility(INVISIBLE);
         ratingTitleHeader.startAnimation(animFadeIn);
         ratingTitleHeader.setVisibility(VISIBLE);
         movieRating.startAnimation(animFadeIn);
         movieRating.setVisibility(VISIBLE);
+        if (landscapeMode) {
+            hideStats();
+            hideCredits();
+        }
     }
 
+    //Method to hide the poster image overlapping the collapsing toolbar
     private void hidePosterImage() {
         poster.startAnimation(animScaleDown);
-        poster.setVisibility(View.INVISIBLE);
+        poster.setVisibility(INVISIBLE);
     }
+    //Method to show the StaticProgressBar (behind the poster) when the poster is hidden
     private void showRatingBar() {
         movieRatingBar.startAnimation(animFadeIn);
         movieRatingBar.setVisibility(VISIBLE);
         ratingTitleHeader.startAnimation(animFadeOut);
-        ratingTitleHeader.setVisibility(View.INVISIBLE);
+        ratingTitleHeader.setVisibility(INVISIBLE);
         movieRating.startAnimation(animFadeOut);
-        movieRating.setVisibility(View.INVISIBLE);
+        movieRating.setVisibility(INVISIBLE);
+        if (landscapeMode) {
+            showStats();
+            showCredits();
+        }
     }
 
+    //Method to display the Credits Recycler (only in Landscape)
+    public void showCredits() {
+        creditsRecycler.setAnimation(animFadeIn);
+        creditsRecycler.setVisibility(VISIBLE);
+    }
 
+    //Method to hide the Credits Recycler (only in Landscape)
+    public void hideCredits() {
+        creditsRecycler.setAnimation(animFadeOut);
+        creditsRecycler.setVisibility(INVISIBLE);
+    }
+
+    //Method to display the stats layout (only in Landscape)
+    public void showStats() {
+        movieDetailsLayout.setAnimation(animFadeIn);
+        movieDetailsLayout.setVisibility(VISIBLE);
+    }
+
+    //Method to hide the stats layout (only in Landscape)
+    public void hideStats() {
+        movieDetailsLayout.setAnimation(animFadeOut);
+        movieDetailsLayout.setVisibility(INVISIBLE);
+    }
+
+    //Populate the UI with the details pulled from Async task and Parcelable
     private void populateUI(final Movie movie) {
         //Set up the Credit Recycler
         creditsRecycler = findViewById(R.id.credits_recycler);
@@ -229,10 +282,10 @@ public class DetailsActivity extends AppCompatActivity {
         } else {
             //Load only data from Intent and add network message
             noCreditsText.setText(R.string.check_network_credits_display);
-            creditsRecycler.setVisibility(View.INVISIBLE);
+            creditsRecycler.setVisibility(INVISIBLE);
             movieRuntime.setText(R.string.unknown_time);
         }
-
+        //Load the imagery into the Toolbar and the Poster image
         Picasso.get().load(UrlUtils.buildPosterPathUrl(movie.getMoviePosterPath())).into(poster);
         Picasso.get().load(UrlUtils.buildBackdropUrl(movie.getMovieBackdrop(), movie.getMoviePosterPath())).into(posterImage);
         movieOverview.setText(movie.getMovieOverview());
@@ -241,23 +294,23 @@ public class DetailsActivity extends AppCompatActivity {
         movieRating.setText(fullRating);
         movieRelease.setText(formatDate(movie.getMovieReleaseDate()));
     }
-
+    //Trim the rating value to two digits
     private String trimRating(float fullRating) {
         Log.e(TAG, "trimRating: " + fullRating );
         String tempString = String.valueOf(fullRating);
         String filteredString = tempString.substring(0,3);
         double tempDouble = Double.parseDouble(filteredString);
-
         return String.format(Locale.US, "%.2f", tempDouble);
     }
 
+    //Convert the time (minutes) into hours & minutes
     private String convertTime(int movieRuntime) {
         int hours = movieRuntime / 60;
         int minutes = movieRuntime % 60;
         return String.format(Locale.US, TIME_FORMAT, hours, minutes);
     }
 
-
+    //Format the release date from 0000-00-00 to 00/00/0000
     private String formatDate(String movieReleaseDate) {
         String[] datestamps = movieReleaseDate.split("-");
         String dateYear = datestamps[0];
@@ -266,6 +319,7 @@ public class DetailsActivity extends AppCompatActivity {
         return dateMonth + getString(R.string.linebreak) + dateDay + getString(R.string.linebreak) + dateYear;
     }
 
+    //Declare and bind the views in this layout
     private void initViews() {
         mToolbar = findViewById(R.id.toolbar);
         scrimView = findViewById(R.id.scrim_view);
@@ -273,11 +327,13 @@ public class DetailsActivity extends AppCompatActivity {
         creditsRecycler = findViewById(R.id.credits_recycler);
         poster = findViewById(R.id.poster);
         posterImage = findViewById(R.id.poster_imageview);
+        movieDetailsLayout = findViewById(R.id.linear_layout_headers_details);
         movieRuntime = findViewById(R.id.movie_runtime);
         movieRelease = findViewById(R.id.movie_release);
         movieRating = findViewById(R.id.movie_rating);
         movieRatingBar = findViewById(R.id.progress);
         movieOverview = findViewById(R.id.synopsis_text);
+        movieOverview.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_20sp));
         movieTagline = findViewById(R.id.movie_tagline);
         movieGenres = findViewById(R.id.movie_genres);
         ratingTitleHeader = findViewById(R.id.rating_title);

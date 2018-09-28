@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/appbar_height"
+        android:layout_height="@dimen/appbar_height_landscape"
         android:fitsSystemWindows="true"
         android:theme="@style/Theme.MaterialComponents.Light.DarkActionBar">
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -20,7 +20,7 @@
             app:contentScrim="@color/colorWhiteFade"
             app:expandedTitleMarginEnd="@dimen/expand_title_margin"
             app:expandedTitleMarginBottom="@dimen/margin_vertical_16dp"
-            app:expandedTitleMarginStart="@dimen/expand_title_margin_start"
+            app:expandedTitleMarginStart="@dimen/expand_title_margin_start_landscape"
             app:expandedTitleTextAppearance="@style/ExpandedToolbar"
             app:collapsedTitleTextAppearance="@style/CollapsedToolbar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
@@ -57,7 +57,7 @@
         <android.support.constraint.ConstraintLayout
             android:id="@+id/details_display"
             android:layout_width="match_parent"
-            android:layout_marginLeft="125dp"
+            android:layout_marginLeft="225dp"
             android:layout_height="match_parent">
             <TextView
                 android:id="@+id/movie_tagline"
@@ -122,7 +122,7 @@
                     android:layout_width="match_parent"
                     android:layout_alignParentTop="true"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_20sp"
+                    android:textSize="20sp"
                     android:textColor="@color/colorPrimaryText"
                     tools:text="@string/lorem_ipsum"/>
             </RelativeLayout>
@@ -139,27 +139,6 @@
         app:layout_anchor="@id/nested_scroller"
         app:layout_anchorGravity="bottom"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/credits_recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/nested_scroller"
-        app:layout_anchorGravity="bottom"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-    <RatingBar
-        android:id="@+id/user_rating_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/credits_recycler"
-        app:layout_anchorGravity="top"
-        android:layout_gravity="top|center_horizontal"
-        android:padding="@dimen/margin_horizontal_16dp"
-        android:elevation="@dimen/half_margin_vertical_4dp"
-        android:numStars="10"
-        android:stepSize="0.5"
-        style="@style/Widget.AppCompat.RatingBar.Small"
-        android:theme="@style/RatingBarTheme"
-        android:isIndicator="true"/>
     <LinearLayout
         android:layout_marginLeft="@dimen/margin_horizontal_8dp"
         android:layout_marginRight="@dimen/margin_horizontal_8dp"
@@ -168,8 +147,8 @@
         android:layout_width="140dp"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/poster"
-        app:layout_anchorGravity="bottom"
-        android:layout_gravity="bottom"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        android:layout_gravity="bottom|center_horizontal"
         android:orientation="vertical">
         <TextView
             android:layout_width="match_parent"
@@ -227,12 +206,21 @@
             android:textColor="@color/colorPrimaryText"
             tools:text="8.5"/>
     </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:visibility="invisible"
+        android:id="@+id/credits_recycler"
+        android:layout_width="700dp"
+        android:layout_height="190sp"
+        app:layout_anchor="@id/linear_layout_headers_details"
+        app:layout_anchorGravity="right|bottom"
+        android:layout_gravity="end"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <ImageView
         android:id="@+id/poster"
-        android:layout_width="140dp"
-        android:layout_height="210dp"
-        android:layout_marginTop="12dp"
+        android:layout_width="200dp"
+        android:layout_height="315dp"
+        android:layout_marginTop="65dp"
         android:layout_gravity="center_vertical"
         app:layout_anchor="@id/app_toolbar"
         app:layout_anchorGravity="start|bottom"
@@ -249,7 +237,7 @@
         android:layout_height="125dp"
         app:layout_anchor="@id/poster"
         android:visibility="invisible"
-        app:layout_anchorGravity="bottom|center"
+        app:layout_anchorGravity="center"
         android:layout_gravity="center_horizontal"
         app:arc_stroke_width="12dp"
         app:arc_text_size="54sp"
