@@ -1,18 +1,13 @@
 package com.thebaileybrew.flix;
 
 import android.animation.ObjectAnimator;
-import android.app.ActionBar;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
@@ -31,7 +26,6 @@ import com.thebaileybrew.flix.model.Credit;
 import com.thebaileybrew.flix.model.Film;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.utils.UrlUtils;
-import com.thebaileybrew.flix.utils.displayMetricsUtils;
 import com.thebaileybrew.flix.utils.networkUtils;
 
 import java.util.ArrayList;
@@ -106,22 +100,23 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onStateChanged(AppBarLayout appBarLayout, State state) {
                 Log.d(TAG, "onStateChanged: Current State: " + state.name());
-                if (state == State.COLLAPSED) {
-                    hidePosterImage();
-                    showRatingBar();
-                    updateRatingBar(currentFilmRating);
-                    posterHidden = true;
-                    scrimView.setBackgroundResource(R.drawable.shape_scrim_collapsed);
-
-                } else if (state == State.EXPANDED) {
-                    showPosterImage();
-                    hideRatingBar();
-                    scrimView.setBackgroundResource(R.drawable.shape_scrim);
-
-                    posterHidden = false;
-
-                } else {
-                    scrimView.setBackgroundResource(R.drawable.shape_scrim);
+                switch (state) {
+                    case COLLAPSED:
+                        hidePosterImage();
+                        showRatingBar();
+                        updateRatingBar(currentFilmRating);
+                        posterHidden = true;
+                        scrimView.setBackgroundResource(R.drawable.shape_scrim_collapsed);
+                        break;
+                    case EXPANDED:
+                        showPosterImage();
+                        hideRatingBar();
+                        scrimView.setBackgroundResource(R.drawable.shape_scrim);
+                        posterHidden = false;
+                        break;
+                    default:
+                        scrimView.setBackgroundResource(R.drawable.shape_scrim);
+                        break;
                 }
             }
         });
@@ -226,25 +221,25 @@ public class DetailsActivity extends AppCompatActivity {
     }
 
     //Method to display the Credits Recycler (only in Landscape)
-    public void showCredits() {
+    private void showCredits() {
         creditsRecycler.setAnimation(animFadeIn);
         creditsRecycler.setVisibility(VISIBLE);
     }
 
     //Method to hide the Credits Recycler (only in Landscape)
-    public void hideCredits() {
+    private void hideCredits() {
         creditsRecycler.setAnimation(animFadeOut);
         creditsRecycler.setVisibility(INVISIBLE);
     }
 
     //Method to display the stats layout (only in Landscape)
-    public void showStats() {
+    private void showStats() {
         movieDetailsLayout.setAnimation(animFadeIn);
         movieDetailsLayout.setVisibility(VISIBLE);
     }
 
     //Method to hide the stats layout (only in Landscape)
-    public void hideStats() {
+    private void hideStats() {
         movieDetailsLayout.setAnimation(animFadeOut);
         movieDetailsLayout.setVisibility(INVISIBLE);
     }

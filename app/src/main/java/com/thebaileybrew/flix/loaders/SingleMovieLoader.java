@@ -2,17 +2,14 @@ package com.thebaileybrew.flix.loaders;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.thebaileybrew.flix.BuildConfig;
-import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.model.Film;
 import com.thebaileybrew.flix.utils.UrlUtils;
 import com.thebaileybrew.flix.utils.jsonUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class SingleMovieLoader extends AsyncTask<String, Void, ArrayList<Film>> {
     private static final String TAG = SingleMovieLoader.class.getSimpleName();

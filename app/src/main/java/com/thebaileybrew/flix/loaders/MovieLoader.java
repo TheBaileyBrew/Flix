@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.thebaileybrew.flix.BuildConfig;
-import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.interfaces.MovieAdapter;
 import com.thebaileybrew.flix.model.Movie;
 import com.thebaileybrew.flix.utils.UrlUtils;

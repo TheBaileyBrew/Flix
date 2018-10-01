@@ -12,7 +12,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.ProgressBar;
 
 import com.thebaileybrew.flix.R;
 import com.thebaileybrew.flix.utils.displayMetricsUtils;
@@ -27,9 +26,9 @@ import java.text.DecimalFormat;
 public class StaticProgressBar extends View {
 
     private Paint paint;
-    protected Paint textPaint;
+    private Paint textPaint;
 
-    private RectF rectF = new RectF();
+    private final RectF rectF = new RectF();
 
     private float strokeWidth;
     private float suffixTextSize;
@@ -47,7 +46,6 @@ public class StaticProgressBar extends View {
 
     private float arcBottomHeight;
 
-    private final int default_finished_color = Color.WHITE;
     private final int default_unfinished_color = Color.rgb(72, 106, 176);
     private final int default_text_color = Color.rgb(66, 145, 241);
     private final float default_suffix_text_size;
@@ -55,8 +53,6 @@ public class StaticProgressBar extends View {
     private final float default_bottom_text_size;
     private final float default_stroke_width;
     private final String default_suffix_text;
-    private final int default_max = 100;
-    private final float default_arc_angle = 360 * 0.8f;
     private float default_text_size;
     private final int min_size;
 
@@ -102,12 +98,15 @@ public class StaticProgressBar extends View {
         initPainters();
     }
 
-    protected void initByAttributes(TypedArray attributes) {
+    private void initByAttributes(TypedArray attributes) {
+        int default_finished_color = Color.WHITE;
         finishedStrokeColor = attributes.getColor(R.styleable.ArcProgress_arc_finished_color, default_finished_color);
         unfinishedStrokeColor = attributes.getColor(R.styleable.ArcProgress_arc_unfinished_color, default_unfinished_color);
         textColor = attributes.getColor(R.styleable.ArcProgress_arc_text_color, default_text_color);
         textSize = attributes.getDimension(R.styleable.ArcProgress_arc_text_size, default_text_size);
+        float default_arc_angle = 360 * 0.8f;
         arcAngle = attributes.getFloat(R.styleable.ArcProgress_arc_angle, default_arc_angle);
+        int default_max = 100;
         setMax(attributes.getInt(R.styleable.ArcProgress_arc_max, default_max));
         setProgress(attributes.getFloat(R.styleable.ArcProgress_arc_progress, 0));
         strokeWidth = attributes.getDimension(R.styleable.ArcProgress_arc_stroke_width, default_stroke_width);
@@ -118,7 +117,7 @@ public class StaticProgressBar extends View {
         bottomText = attributes.getString(R.styleable.ArcProgress_arc_bottom_text);
     }
 
-    protected void initPainters() {
+    private void initPainters() {
         textPaint = new TextPaint();
         textPaint.setColor(textColor);
         textPaint.setTextSize(textSize);
@@ -138,7 +137,7 @@ public class StaticProgressBar extends View {
         super.invalidate();
     }
 
-    public float getStrokeWidth() {
+    private float getStrokeWidth() {
         return strokeWidth;
     }
 
@@ -147,7 +146,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public float getSuffixTextSize() {
+    private float getSuffixTextSize() {
         return suffixTextSize;
     }
 
@@ -156,7 +155,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public String getBottomText() {
+    private String getBottomText() {
         return bottomText;
     }
 
@@ -178,7 +177,7 @@ public class StaticProgressBar extends View {
         invalidate();
     }
 
-    public int getMax() {
+    private int getMax() {
         return max;
     }
 
@@ -189,7 +188,7 @@ public class StaticProgressBar extends View {
         }
     }
 
-    public float getBottomTextSize() {
+    private float getBottomTextSize() {
         return bottomTextSize;
     }
 
@@ -198,7 +197,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public float getTextSize() {
+    private float getTextSize() {
         return textSize;
     }
 
@@ -207,7 +206,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public int getTextColor() {
+    private int getTextColor() {
         return textColor;
     }
 
@@ -216,7 +215,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public int getFinishedStrokeColor() {
+    private int getFinishedStrokeColor() {
         return finishedStrokeColor;
     }
 
@@ -225,7 +224,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public int getUnfinishedStrokeColor() {
+    private int getUnfinishedStrokeColor() {
         return unfinishedStrokeColor;
     }
 
@@ -234,7 +233,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public float getArcAngle() {
+    private float getArcAngle() {
         return arcAngle;
     }
 
@@ -243,7 +242,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public String getSuffixText() {
+    private String getSuffixText() {
         return suffixText;
     }
 
@@ -252,7 +251,7 @@ public class StaticProgressBar extends View {
         this.invalidate();
     }
 
-    public float getSuffixTextPadding() {
+    private float getSuffixTextPadding() {
         return suffixTextPadding;
     }
 

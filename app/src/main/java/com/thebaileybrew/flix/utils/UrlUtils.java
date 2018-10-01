@@ -1,22 +1,15 @@
 package com.thebaileybrew.flix.utils;
 
 import android.net.Uri;
-import android.os.Parcel;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.thebaileybrew.flix.R;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
-
-import static com.thebaileybrew.flix.R.*;
 
 public class UrlUtils {
     private static final String TAG = UrlUtils.class.getSimpleName();
@@ -164,7 +157,7 @@ public class UrlUtils {
             Log.e(TAG, "buildMovieUrl: failed to build full db URL", me);
             return null;
         }
-    };
+    }
 
     //Build the URL for querying a single movie in the database
     public static URL buildSingleMovieUrl(String apiKey, String movieID) {

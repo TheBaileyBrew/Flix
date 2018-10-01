@@ -71,4 +71,5 @@
     <string name="preference_year_default">0000</string>
     <string name="preference_year_key">primary_release_year</string>
     <string name="search">Search</string>
+    <string name="search_movies">Search movies..</string>
 </resources>

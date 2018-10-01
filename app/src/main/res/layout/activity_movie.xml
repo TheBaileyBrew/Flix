@@ -23,7 +23,7 @@
             android:paddingStart="@dimen/margin_horizontal_8dp"
             android:paddingEnd="@dimen/margin_horizontal_8dp"
             android:textColorHint="@color/colorWhite"
-            android:hint="Search movies..">
+            android:hint="@string/search_movies">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/search_entry"
                 android:layout_width="match_parent"

@@ -14,15 +14,9 @@
 
     <!-- Color Scheme for Rating Progress-->
     <!-- HIGH -->
-    <color name="colorGoodRating">#25cc00</color>
-    <color name="colorGoodRatingFade">#b8ffc3</color>
     <color name="colorGoodFade">#9025cc00</color>
     <!-- MED -->
-    <color name="colorMidRating">#f5c400</color>
-    <color name="colorMidRatingFade">#ffe7ab</color>
     <color name="colorMidFade">#90f5c400</color>
     <!-- LOW -->
-    <color name="colorLowRating">#dc0202</color>
-    <color name="colorLowRatingFade">#ffa1a1</color>
     <color name="colorLowFade">#90dc0202</color>
 </resources>

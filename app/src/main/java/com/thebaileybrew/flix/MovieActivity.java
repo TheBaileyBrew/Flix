@@ -1,6 +1,5 @@
 package com.thebaileybrew.flix;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.constraint.ConstraintLayout;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,8 +32,6 @@ import java.util.Random;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -58,7 +54,6 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
     private SwipeRefreshLayout swipeRefresh;
 
     private LinearLayout searchLayout;
-    private TextInputLayout searchEntryLayout;
     private TextInputEditText searchEntry;
     private boolean searchVisible = false;
 
@@ -124,7 +119,7 @@ public class MovieActivity extends AppCompatActivity implements MovieAdapter.Mov
         noNetworkLayout = findViewById(R.id.no_connection_constraint_layout);
         swipeRefresh = findViewById(R.id.swipe_refresh);
         searchLayout = findViewById(R.id.search_layout);
-        searchEntryLayout = findViewById(R.id.search_layout_entry);
+        TextInputLayout searchEntryLayout = findViewById(R.id.search_layout_entry);
         searchEntry = findViewById(R.id.search_entry);
     }
 

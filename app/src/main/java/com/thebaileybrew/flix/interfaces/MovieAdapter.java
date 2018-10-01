@@ -1,16 +1,11 @@
 package com.thebaileybrew.flix.interfaces;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 
 import com.squareup.picasso.Picasso;
 import com.thebaileybrew.flix.R;
@@ -23,7 +18,6 @@ import java.util.Locale;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> {
-    private final static String TAG = MovieAdapter.class.getSimpleName();
 
     private final LayoutInflater layoutInflater;
     private ArrayList<Movie> movieCollection;
@@ -66,11 +60,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                 .into(holder.moviePoster);
     }
 
-    private float trimVoteFount(float movieVoteAverage) {
-        String s = String.format(Locale.US, "%.2f", movieVoteAverage);
-        return Float.parseFloat(s);
-    }
-
     @Override
     public int getItemCount() {
         if (movieCollection == null) {
@@ -102,7 +91,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             adapterClickHandler.onClick(v, currentMovie);
         }
 
-        public void updateMovieRating(double currentProgress) {
+        void updateMovieRating(double currentProgress) {
             if(currentProgress >= 7.00) {
                 movieRatingView.setTextColor(Color.parseColor("#ffffff"));
                 movieRatingView.setFinishedStrokeColor(Color.parseColor("#25cc00"));
