@@ -24,4 +24,12 @@
     <dimen name="super_small_margin">2dp</dimen>
     <dimen name="margin_top_logo">22dp</dimen>
     <dimen name="text_20sp">20sp</dimen>
+    <dimen name="standard_xhdpi_text16sp">16sp</dimen>
+    <dimen name="marginTop_poster_65dp">65dp</dimen>
+    <dimen name="margin_start_12dp">12dp</dimen>
+    <dimen name="static_progress_xhdpi_size_115">115dp</dimen>
+    <dimen name="margin_bottom_22dp">22dp</dimen>
+    <dimen name="small_xhdpi_text_14sp">14sp</dimen>
+    <dimen name="recycler_height_xhdpi_130">130dp</dimen>
+    <dimen name="recycler_width_xhdpi_700">700dp</dimen>
 </resources>
